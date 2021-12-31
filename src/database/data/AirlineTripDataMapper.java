@@ -20,7 +20,7 @@ public class AirlineTripDataMapper {
     public Document createAirlineTripDetailsDocument(AirlineTripDetatils airlineTripDetails) {
         Document airlineTripDetailsDoc = new Document()
                 .append("depatureDateTime", airlineTripDetails.getDepatureDateTime().toString())
-                .append("arrivalDateTime", airlineTripDetails.getArrivalDateTime())
+                .append("arrivalDateTime", airlineTripDetails.getArrivalDateTime().toString())
                 .append("destinationTerminalNo", airlineTripDetails.getDestinationTerminalNo())
                 .append("orginHallNo", airlineTripDetails.getOrginHallNo());
 
@@ -45,7 +45,7 @@ public class AirlineTripDataMapper {
                 .append("airlineTripDetatils",
                         airlineTripDetailsDoc)
                 .append("airlineCost", airlineTrip.getAirlineCost())
-                .append("crew", crewDoc).append("tickets", tickets);
+                .append("crew", crewDoc).append("tickets", tickets).append("airlineTripStatus", airlineTrip.getAirlineTripState().getClass().toString());
         return airlineDoc;
     }
 

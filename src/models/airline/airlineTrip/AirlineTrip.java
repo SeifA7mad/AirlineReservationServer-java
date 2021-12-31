@@ -33,7 +33,7 @@ public class AirlineTrip implements AirlineTripSubject {
     private ArrayList<AirlineTripObserver> passengerObservers;
 
     public AirlineTrip() {
-
+        this.airlineTripDetails = new ArrayList<AirlineTripDetatils>();
     }
 
     public AirlineTrip(ObjectId airlineTripID, int maxNumberOfTickets, Airplane airplane, Airport origin,
@@ -55,10 +55,10 @@ public class AirlineTrip implements AirlineTripSubject {
         mapper.insert(this);
     }
 
-    public void addAirlineTrip(int maxNumberOfTickets, Airplane airplane, Airport origin, Airport destination,
+    public void addAirlineTrip(Airplane airplane, Airport origin, Airport destination,
             AirlineTripDetatils airlineTripDetails, double airlineCost, Crew crew) {
-        this.maxNumberOfTickets = maxNumberOfTickets;
         this.airplane = airplane;
+        this.maxNumberOfTickets = airplane.getSeats().size();
         this.origin = origin;
         this.destination = destination;
         this.airlineTripDetails.add(airlineTripDetails);
@@ -115,6 +115,10 @@ public class AirlineTrip implements AirlineTripSubject {
 
     public double getAirlineCost() {
         return this.airlineCost;
+    }
+
+    public AirlineTripState getAirlineTripState() {
+        return this.airlineTripState;
     }
 
 }

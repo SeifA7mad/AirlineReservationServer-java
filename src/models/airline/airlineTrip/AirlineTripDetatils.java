@@ -1,18 +1,26 @@
 package models.airline.airlineTrip;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class AirlineTripDetatils {
-    private LocalDate depatureDateTime;
-    private LocalDate arrivalDateTime;
+    private LocalDateTime depatureDateTime;
+    private LocalDateTime arrivalDateTime;
     private int destinationTerminalNo;
     private int orginHallNo;
+
+    public AirlineTripDetatils(
+            String depatureDateTime, String arrivalDateTime, int destinationTerminalNo, int orginHallNo) {
+        this.depatureDateTime = LocalDateTime.parse(depatureDateTime);
+        this.arrivalDateTime = LocalDateTime.parse(arrivalDateTime);
+        this.destinationTerminalNo = destinationTerminalNo;
+        this.orginHallNo = orginHallNo;
+    }
     
-    public LocalDate getDepatureDateTime() {
+    public LocalDateTime getDepatureDateTime() {
         return depatureDateTime;
     }
 
-    public LocalDate getArrivalDateTime() {
+    public LocalDateTime getArrivalDateTime() {
         return arrivalDateTime;
     }
 
