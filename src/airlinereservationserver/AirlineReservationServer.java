@@ -82,8 +82,17 @@ public class AirlineReservationServer {
         // User p = new Pilot();
         // p.login("Seif@test", "12345");
 
-        Airplane airplane = new Airplane();
-        airplane.getAirplanes();
+        // GET ALL AIRPLANES TEST
+        // Airplane airplane = new Airplane();
+        // airplane.getAirplanes();
+
+        // GET ALL AIRPORTS TEST
+        // Airport airport = new Airport();
+        // airport.getAirports();
+
+        // GET ALL Hosts TEST
+        // Host host = new Host();
+        // host.getAllHosts();
     }
     
 }

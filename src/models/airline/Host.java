@@ -39,6 +39,15 @@ public class Host {
         return true;
     }
 
+    public ArrayList<Host> getAllHosts() {
+        ArrayList<Host> hosts = null;
+        hosts = mapper.fetchHosts();
+        if (hosts == null) {
+            return null;
+        }
+        return hosts;
+    }
+
     public ObjectId getHostId() {
         return this.hostId;
     }

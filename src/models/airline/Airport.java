@@ -37,6 +37,15 @@ public class Airport {
         mapper.insert(this);
     }
 
+    public ArrayList<Airport> getAirports() {
+        ArrayList<Airport> airports = null;
+        airports = mapper.fetchAirports();
+        if (airports == null) {
+            return null;
+        }
+        return airports;
+    }
+
     public ObjectId getAirportId() {
         return this.airportID;
     }

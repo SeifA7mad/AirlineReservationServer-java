@@ -1,8 +1,12 @@
 package database.data;
 
+import java.util.ArrayList;
+
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 
 import org.bson.Document;
+import org.bson.types.ObjectId;
 
 import database.DatabaseConnection;
 import models.airline.Airport;
@@ -19,5 +23,37 @@ public class AirportDataMapper {
     public void insert(Airport airport) {
         Document airportDoc = createAirportDocument(airport);
         airportCollection.insertOne(airportDoc);
+    }
+
+    private ArrayList<Airport> getAirportsArrayList(MongoCursor<Document> cursor) {
+        ArrayList<Airport> airports = new ArrayList<Airport>();
+
+        while (cursor.hasNext()) {
+            Document airplaneDoc = cursor.next();
+
+            ObjectId airportID = airplaneDoc.getObjectId("_id");
+            String name = airplaneDoc.getString("name");
+            String country = airplaneDoc.getString("country");
+            ArrayList<Integer> terminalNumber = airplaneDoc.get("terminalNumbers", new ArrayList<Integer>().getClass());
+            ArrayList<Integer> hallNumber = airplaneDoc.get("hallNumbers", new ArrayList<Integer>().getClass());
+
+            Airport airport = new Airport(airportID, name, country, terminalNumber, hallNumber);
+            airports.add(airport);
+        }
+
+        return airports;
+    }
+
+    public ArrayList<Airport> fetchAirports() {
+
+        MongoCursor<Document> cursor = airportCollection.find().iterator();
+
+        if (cursor == null) {
+            return null;
+        }
+
+        ArrayList<Airport> airports = getAirportsArrayList(cursor);
+
+        return airports;
     }
 }
