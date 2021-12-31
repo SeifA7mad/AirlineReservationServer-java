@@ -67,6 +67,9 @@ public class AirlineTrip implements AirlineTripSubject {
         this.tickets = new ArrayList<Ticket>();
         this.airlineTripState = new UnpublishedState();
 
+        this.crew.updateCrew(false);
+        this.airplane.updateAirplane(true);
+
         mapper.insert(this);
     }
 

@@ -45,7 +45,8 @@ public class AirlineTripDataMapper {
                 .append("airlineTripDetatils",
                         airlineTripDetailsDoc)
                 .append("airlineCost", airlineTrip.getAirlineCost())
-                .append("crew", crewDoc).append("tickets", tickets).append("airlineTripStatus", airlineTrip.getAirlineTripState().getClass().toString());
+                .append("crew", crewDoc).append("tickets", tickets)
+                .append("airlineTripStatus", airlineTrip.getAirlineTripState().getClass().toString());
         return airlineDoc;
     }
 

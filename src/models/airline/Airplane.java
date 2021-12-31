@@ -75,6 +75,11 @@ public class Airplane {
         return airplanes;
     }
 
+    public void updateAirplane(boolean onDuty) {
+        this.onDuty = onDuty;
+        mapper.updateAirplane(this.airplaneID, this.onDuty);
+    }
+
     // public Airplane getAirplanes(ObjectId airplaneId) {
     //     Airplane airplane = null;
     //     airplane = mapper.fetchAirplanes(airplaneId);

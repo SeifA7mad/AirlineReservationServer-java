@@ -5,6 +5,8 @@ import java.util.Iterator;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
 
 import org.bson.Document;
 import org.bson.types.ObjectId;
@@ -42,6 +44,10 @@ public class CrewDataMapper {
 
         Document crewDoc = new Document().append("Pilot", pilotDoc).append("coPilots", coPioltsDoc).append("hosts",
                 hostsDoc).append("airplaneLevels", airplaneLevels).append("isAvailable", crew.isIsAvailable());
+
+        if (crew.getCrewId() != null) {
+            crewDoc.append("_id", crew.getCrewId());
+        }
         return crewDoc;
     }
 
@@ -57,7 +63,7 @@ public class CrewDataMapper {
             Document crewDoc = cursor.next();
 
             ObjectId crewId = crewDoc.getObjectId("_id");
-            Pilot pilot = (Pilot) userDataMapper.createUserObj((Document)crewDoc.get("Pilot"));
+            Pilot pilot = (Pilot) userDataMapper.createUserObj((Document) crewDoc.get("Pilot"));
 
             ArrayList<Pilot> co_pilots = new ArrayList<Pilot>();
             ArrayList<Document> coPilotsDoc = crewDoc.get("coPilots", new ArrayList<Document>().getClass());
@@ -66,8 +72,8 @@ public class CrewDataMapper {
             });
 
             ArrayList<Document> hostsDoc = crewDoc.get("hosts", new ArrayList<Document>().getClass());
-            Iterator<Document> hostcursor =  hostsDoc.iterator();
-            ArrayList<Host> hosts = hostDataMapper.getHostsArrayList(hostcursor); 
+            Iterator<Document> hostcursor = hostsDoc.iterator();
+            ArrayList<Host> hosts = hostDataMapper.getHostsArrayList(hostcursor);
 
             ArrayList<String> airplaneLevels = crewDoc.get("airplaneLevels", new ArrayList<String>().getClass());
 
@@ -91,5 +97,9 @@ public class CrewDataMapper {
         ArrayList<Crew> crews = getCrewArrayList(cursor);
 
         return crews;
+    }
+
+    public void updateCrew(ObjectId crewId, boolean isAvailable) {
+        crewCollection.updateOne(Filters.eq("_id", crewId), Updates.set("isAvailable", isAvailable));
     }
 }

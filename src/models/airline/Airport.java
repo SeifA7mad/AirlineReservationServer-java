@@ -21,13 +21,14 @@ public class Airport {
 
     public Airport(ObjectId airportID, String name, String country, ArrayList<Integer> terminalNumber,
             ArrayList<Integer> hallNumber) {
+        this.airportID = airportID;
         this.name = name;
         this.country = country;
         this.terminalNumber = terminalNumber;
         this.hallNumber = hallNumber;
     }
 
-    public void addAirport(String name, String country, ArrayList<Integer> terminalNumber, 
+    public void addAirport(String name, String country, ArrayList<Integer> terminalNumber,
             ArrayList<Integer> hallNumber) {
         this.name = name;
         this.country = country;

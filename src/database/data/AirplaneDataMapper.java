@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
 
 import org.bson.Document;
 import org.bson.types.ObjectId;
@@ -19,7 +20,7 @@ public class AirplaneDataMapper {
     private MongoCollection airplaneCollection = DatabaseConnection.getCollection("airplanes");
 
     public Document createAirplaneDocument(Airplane airplane) {
-        
+
         ArrayList<Document> seatsDoc = new ArrayList<Document>();
         airplane.getSeats().forEach((seat) -> {
             Document seatDoc = new Document().append("availablility", seat.isAvailablility()).append("seatType",
@@ -36,6 +37,10 @@ public class AirplaneDataMapper {
                 .append("maxWeightCapacity", airplane.getMaxWeightCapacity())
                 .append("maxBusnissSeats", airplane.getMaxBusnissSeats())
                 .append("maxTravelDistance", airplane.getMaxTravelDistance());
+
+        if (airplane.getAirplaneID() != null) {
+            airplaneDoc.append("_id", airplane.getAirplaneID());
+        }
 
         return airplaneDoc;
     }
@@ -91,6 +96,10 @@ public class AirplaneDataMapper {
         ArrayList<Airplane> airplanes = getAirplanesArrayList(cursor);
 
         return airplanes;
+    }
+
+    public void updateAirplane(ObjectId airplaneId, boolean onDuty) {
+        airplaneCollection.updateOne(Filters.eq("_id", airplaneId), Updates.set("onDuty", onDuty));
     }
 
 }

@@ -17,6 +17,9 @@ public class AirportDataMapper {
     public Document createAirportDocument(Airport airport) {
         Document airportDoc = new Document().append("name", airport.getName()).append("country", airport.getCountry())
                 .append("terminalNumbers", airport.getTerminalNumber()).append("hallNumbers", airport.getHallNumber());
+        if (airport.getAirportId() != null) {
+            airportDoc.append("_id", airport.getAirportId());
+        }
         return airportDoc;
     }
 

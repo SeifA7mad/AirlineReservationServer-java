@@ -51,6 +51,11 @@ public class Crew {
         return crews;
     }
 
+    public void updateCrew(boolean isAvailable) {
+        this.isAvailable = isAvailable;
+        mapper.updateCrew(this.crewId, this.isAvailable);
+    }
+
     public ObjectId getCrewId() {
         return crewId;
     }
@@ -73,6 +78,10 @@ public class Crew {
 
     public boolean isIsAvailable() {
         return isAvailable;
+    }
+
+    public void setIsAvailable(boolean isAvailable) {
+        this.isAvailable = isAvailable;
     }
 
 }
