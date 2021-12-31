@@ -93,6 +93,11 @@ public class AirlineReservationServer {
         // GET ALL Hosts TEST
         // Host host = new Host();
         // host.getAllHosts();
+
+        // GET ALL CREWS TEST
+        // Crew crew = new Crew();
+        // ArrayList<Crew> c = crew.getCrews();
+        // System.out.println(c.get(0).getCrewId());
     }
     
 }

@@ -42,6 +42,15 @@ public class Crew {
     public Crew() {
     }
 
+    public ArrayList<Crew> getCrews() {
+        ArrayList<Crew> crews = null;
+        crews = mapper.fetchCrews();
+        if (crews == null) {
+            return null;
+        }
+        return crews;
+    }
+
     public ObjectId getCrewId() {
         return crewId;
     }

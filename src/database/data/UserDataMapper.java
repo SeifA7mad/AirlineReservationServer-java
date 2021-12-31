@@ -43,12 +43,7 @@ public class UserDataMapper {
         userCollection.insertOne(userDoc);
     }
 
-    public User findUser(String userEmail, String userPassword) {
-        Document userDoc = (Document) userCollection.find(Filters.and(Filters.eq("account.password",
-                userPassword), Filters.eq("account.email", userEmail))).first();
-        if (userDoc == null) {
-            return null;
-        }
+    public User createUserObj(Document userDoc) {
         Document userAccountDoc = (Document) userDoc.get("account");
 
         ObjectId userId = userDoc.getObjectId("_id");
@@ -77,5 +72,14 @@ public class UserDataMapper {
         }
 
         return user;
+    }
+
+    public User findUser(String userEmail, String userPassword) {
+        Document userDoc = (Document) userCollection.find(Filters.and(Filters.eq("account.password",
+                userPassword), Filters.eq("account.email", userEmail))).first();
+        if (userDoc == null) {
+            return null;
+        }
+        return createUserObj(userDoc);
     }
 }

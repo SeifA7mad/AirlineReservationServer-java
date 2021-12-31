@@ -1,6 +1,7 @@
 package database.data;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
@@ -29,6 +30,24 @@ public class HostDataMapper {
     }
 
     private ArrayList<Host> getHostsArrayList(MongoCursor<Document> cursor) {
+        ArrayList<Host> hosts = new ArrayList<Host>();
+
+        while (cursor.hasNext()) {
+            Document hostDoc = cursor.next();
+
+            ObjectId hostId = hostDoc.getObjectId("_id");
+            String passportNo = hostDoc.getString("passportNumber");
+            String name = hostDoc.getString("name");
+            ArrayList<String> languages = hostDoc.get("languages", new ArrayList<String>().getClass());
+
+            Host host = new Host(hostId, passportNo, name, languages);
+            hosts.add(host);
+        }
+
+        return hosts;
+    }
+
+    public ArrayList<Host> getHostsArrayList(Iterator<Document> cursor) {
         ArrayList<Host> hosts = new ArrayList<Host>();
 
         while (cursor.hasNext()) {
