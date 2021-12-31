@@ -2,13 +2,15 @@ package models.ticket;
 
 import java.util.HashMap;
 
+import org.bson.types.ObjectId;
+
 import models.airline.Seat;
 import models.airline.airlineTrip.AirlineTrip;
 import models.ticket.ticketState.*;
 import models.user.Passenger;
 
 public class Ticket {
-    private int ticketId;
+    private ObjectId ticketId;
     private double price;
     private int requestExtraWeight;
     private boolean requestWheelChair;

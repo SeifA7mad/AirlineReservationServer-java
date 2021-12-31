@@ -75,6 +75,15 @@ public class Airplane {
         return airplanes;
     }
 
+    // public Airplane getAirplanes(ObjectId airplaneId) {
+    //     Airplane airplane = null;
+    //     airplane = mapper.fetchAirplanes(airplaneId);
+    //     if (airplane == null) {
+    //         return null;
+    //     }
+    //     return airplane;
+    // }
+
     public ObjectId getAirplaneID() {
         return airplaneID;
     }

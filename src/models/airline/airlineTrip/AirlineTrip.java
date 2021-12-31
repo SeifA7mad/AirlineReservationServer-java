@@ -2,6 +2,8 @@ package models.airline.airlineTrip;
 
 import java.util.ArrayList;
 
+import org.bson.types.ObjectId;
+
 import database.data.AirlineTripDataMapper;
 import models.airline.Airplane;
 import models.airline.Airport;
@@ -12,7 +14,8 @@ import models.user.Admin;
 import models.user.airlineTripObserver.AirlineTripObserver;
 
 public class AirlineTrip implements AirlineTripSubject {
-    private String airlineTripID;
+
+    private ObjectId airlineTripID;
     private int maxNumberOfTickets;
     private Airplane airplane;
 
@@ -20,11 +23,8 @@ public class AirlineTrip implements AirlineTripSubject {
     private Airport destination;
     private ArrayList<AirlineTripDetatils> airlineTripDetails;
     private double airlineCost;
-
     private ArrayList<Ticket> tickets;
-
     private Crew crew;
-    private Admin admin;
 
     private AirlineTripDataMapper mapper = new AirlineTripDataMapper();
 
@@ -36,19 +36,38 @@ public class AirlineTrip implements AirlineTripSubject {
 
     }
 
+    public AirlineTrip(ObjectId airlineTripID, int maxNumberOfTickets, Airplane airplane, Airport origin,
+            Airport destination,
+            ArrayList<AirlineTripDetatils> airlineTripDetails, double airlineCost, ArrayList<Ticket> tickets,
+            Crew crew, AirlineTripState airlineTripState) {
+        this.airlineTripID = airlineTripID;
+        this.maxNumberOfTickets = maxNumberOfTickets;
+        this.airplane = airplane;
+        this.origin = origin;
+        this.destination = destination;
+        this.airlineTripDetails = airlineTripDetails;
+        this.airlineCost = airlineCost;
+        this.tickets = tickets;
+        this.crew = crew;
+
+        this.airlineTripState = airlineTripState;
+
+        mapper.insert(this);
+    }
+
     public void addAirlineTrip(int maxNumberOfTickets, Airplane airplane, Airport origin, Airport destination,
             AirlineTripDetatils airlineTripDetails, double airlineCost, Crew crew) {
-                this.maxNumberOfTickets = maxNumberOfTickets;
-                this.airplane = airplane;
-                this.origin = origin;
-                this.destination = destination;
-                this.airlineTripDetails.add(airlineTripDetails);
-                this.airlineCost = airlineCost;
-                this.crew = crew;
+        this.maxNumberOfTickets = maxNumberOfTickets;
+        this.airplane = airplane;
+        this.origin = origin;
+        this.destination = destination;
+        this.airlineTripDetails.add(airlineTripDetails);
+        this.airlineCost = airlineCost;
+        this.crew = crew;
+        this.tickets = new ArrayList<Ticket>();
+        this.airlineTripState = new UnpublishedState();
 
-                this.airlineTripState = new UnpublishedState();
-                
-                mapper.insert(this);
+        mapper.insert(this);
     }
 
     @Override
@@ -66,7 +85,7 @@ public class AirlineTrip implements AirlineTripSubject {
         // TODO Auto-generated method stub
     }
 
-    public String getAirlineTripID() {
+    public ObjectId getAirlineTripID() {
         return this.airlineTripID;
     }
 
@@ -80,10 +99,6 @@ public class AirlineTrip implements AirlineTripSubject {
 
     public Crew getCrew() {
         return this.crew;
-    }
-
-    public Admin getAdmin() {
-        return this.admin;
     }
 
     public Airport getOrigin() {

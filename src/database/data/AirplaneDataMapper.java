@@ -83,7 +83,7 @@ public class AirplaneDataMapper {
     public ArrayList<Airplane> fetchAirplanes() {
 
         MongoCursor<Document> cursor = airplaneCollection.find().iterator();
-        
+
         if (cursor == null) {
             return null;
         }
@@ -92,4 +92,5 @@ public class AirplaneDataMapper {
 
         return airplanes;
     }
+
 }
