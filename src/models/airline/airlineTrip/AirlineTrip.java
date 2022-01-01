@@ -77,6 +77,10 @@ public class AirlineTrip implements AirlineTripSubject {
         return airlineTrips;
     }
 
+    public AirlineTrip getAirlineTripBy(ObjectId airlineTripId) {
+        return mapper.fetchAirlineTripBy(airlineTripId);
+    }
+
     @Override
     public void addObserver(ArrayList<AirlineTripObserver> o) {
         // TODO Auto-generated method stub
@@ -109,6 +113,21 @@ public class AirlineTrip implements AirlineTripSubject {
             return null;
         }
         return seat;
+    }
+
+    public void editAirlineTrip(AirlineTrip airlineTrip) {
+        // TODO Auto-generated method stub
+
+    }
+
+    public boolean cancelAirlineTrip(AirlineTrip airlineTrip) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    public void requestToCancelAirlineTrip(AirlineTrip airlineTrip) {
+        // TODO Auto-generated method stub
+
     }
 
     public ObjectId getAirlineTripID() {

@@ -137,4 +137,13 @@ public class AirlineTripDataMapper {
         return airlineTrips;
     }
 
+    public AirlineTrip fetchAirlineTripBy(ObjectId airlineTripId) {
+        Document airlineTripDoc = (Document) airlineTripCollection.find(Filters.eq("_id", airlineTripId)).first();
+
+        if (airlineTripDoc == null) {
+            return null;
+        }
+        return createAirlineTripObj(airlineTripDoc);
+    }
+
 }
