@@ -9,6 +9,7 @@ import org.bson.Document;
 import org.bson.types.ObjectId;
 
 import database.DatabaseConnection;
+import models.ticket.Ticket;
 import models.user.*;
 
 public class UserDataMapper {
@@ -23,7 +24,7 @@ public class UserDataMapper {
                 .append("Lname", user.getLname()).append("DOB",
                         user.getDOB().toString())
                 .append("phoneNo", user.getPhoneNo()).append("gender", user.getGender()).append("account",
-                        userAccountDoc);
+                        userAccountDoc).append("tickets", new ArrayList<Document>());
 
         if (user.getUserId() != null) {
             userDoc.append("_id", user.getUserId());
@@ -63,9 +64,14 @@ public class UserDataMapper {
             user = new Pilot(userId, passportID, Fname, Lname, DOB, phoneNo, gender,
                     username, email, password, expirence);
         } else if (userAccountDoc.getString("accType").equals("passenger")) {
-            ArrayList<ObjectId> companions = userDoc.get("companions", new ArrayList<ObjectId>().getClass());
+
+            // CHECK IF COMPANION != NULL AND TICKETS != NULL
+            ArrayList<ObjectId> companionsDoc = userDoc.get("companions", new ArrayList<ObjectId>().getClass());
+            ArrayList<Passenger> companions = new ArrayList<Passenger>(); 
+            ArrayList<Ticket> tickets = new ArrayList<Ticket>();
+
             user = new Passenger(userId, passportID, Fname, Lname, DOB, phoneNo, gender,
-                    username, email, password, companions);
+                    username, email, password, companions, tickets);
         } else if (userAccountDoc.getString("accType").equals("admin")) {
             user = new Admin(userId, passportID, Fname, Lname, DOB, phoneNo, gender,
                     username, email, password);

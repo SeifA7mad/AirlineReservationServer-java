@@ -19,6 +19,7 @@ import models.airline.Crew;
 import models.airline.Host;
 import models.airline.airlineTrip.AirlineTrip;
 import models.airline.airlineTrip.AirlineTripDetatils;
+import models.user.Passenger;
 import models.user.Pilot;
 import models.user.User;
 
@@ -86,25 +87,30 @@ public class AirlineReservationServer {
         // User p = new Pilot();
         // p.login("Seif@test", "12345");
 
-        // GET ALL AIRPLANES TEST
-        Airplane airplane = new Airplane();
-        ArrayList<Airplane> airplanes = airplane.getAirplanes();
-        // GET ALL AIRPORTS TEST
-        Airport airport = new Airport();
-        ArrayList<Airport> airports = airport.getAirports();
+        // // GET ALL AIRPLANES TEST
+        // Airplane airplane = new Airplane();
+        // ArrayList<Airplane> airplanes = airplane.getAirplanes();
+        // // GET ALL AIRPORTS TEST
+        // Airport airport = new Airport();
+        // ArrayList<Airport> airports = airport.getAirports();
 
 
-        // GET ALL Hosts TEST
-        // Host host = new Host();
-        // host.getAllHosts();
+        // // GET ALL Hosts TEST
+        // // Host host = new Host();
+        // // host.getAllHosts();
 
-        // GET ALL CREWS TEST
-        Crew crew = new Crew();
-        ArrayList<Crew> crews = crew.getCrews();
+        // // GET ALL CREWS TEST
+        // Crew crew = new Crew();
+        // ArrayList<Crew> crews = crew.getCrews();
 
-        // INSERT AIRLINETRIP TEST
-        AirlineTrip airlineTrip = new AirlineTrip();
-        airlineTrip.addAirlineTrip(airplanes.get(0), airports.get(0), airports.get(1), new AirlineTripDetatils("2017-01-13T17:09:42.411", "2017-01-13T17:09:42.411", 1, 1), 200, crews.get(0));
+        // // INSERT AIRLINETRIP TEST
+        // AirlineTrip airlineTrip = new AirlineTrip();
+        // airlineTrip.addAirlineTrip(airplanes.get(0), airports.get(0), airports.get(1), new AirlineTripDetatils("2017-01-13T17:09:42.411", "2017-01-13T17:09:42.411", 1, 1), 200, crews.get(0));
+
+        // // INSERT PASSENGER TEST
+        // Passenger pa1 = new Passenger("A434343", "Karim", "Rafaat", "2000-11-10", "010220910", 'M', "karim", "karim@test.com", "123");
+        // pa1.insertPassenger();
+
     }
 
 }

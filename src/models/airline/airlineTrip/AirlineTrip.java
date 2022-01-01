@@ -8,6 +8,7 @@ import database.data.AirlineTripDataMapper;
 import models.airline.Airplane;
 import models.airline.Airport;
 import models.airline.Crew;
+import models.airline.Seat;
 import models.airline.airlineTrip.airlineTripState.*;
 import models.ticket.Ticket;
 import models.user.Admin;
@@ -86,6 +87,25 @@ public class AirlineTrip implements AirlineTripSubject {
     @Override
     public void updateAll(AirlineTrip airlineTrip, String news) {
         // TODO Auto-generated method stub
+    }
+
+    public Seat getFirstAvailableSeat(String seatType) {
+        Seat seat = null;
+
+        for (int i = 0; i < this.airplane.getSeats().size(); i++) {
+            if (this.airplane.getSeats().get(i).getSeatType().equals(seatType)
+                    && this.airplane.getSeats().get(i).isAvailablility()) {
+                this.airplane.getSeats().get(i).setAvailablility(false);
+                seat = this.airplane.getSeats().get(i);
+                seat.setSeatID(i + 1);
+                break;
+            }
+        }
+
+        if (seat == null) {
+            return null;
+        }
+        return seat;
     }
 
     public ObjectId getAirlineTripID() {
