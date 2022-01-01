@@ -56,31 +56,34 @@ public class CrewDataMapper {
         crewCollection.insertOne(crewDoc);
     }
 
+    public Crew createCrewObj(Document crewDoc) {
+        ObjectId crewId = crewDoc.getObjectId("_id");
+        Pilot pilot = (Pilot) userDataMapper.createUserObj((Document) crewDoc.get("Pilot"));
+
+        ArrayList<Pilot> co_pilots = new ArrayList<Pilot>();
+        ArrayList<Document> coPilotsDoc = crewDoc.get("coPilots", new ArrayList<Document>().getClass());
+        coPilotsDoc.forEach((coPilot) -> {
+            co_pilots.add((Pilot) userDataMapper.createUserObj((Document) coPilot));
+        });
+
+        ArrayList<Document> hostsDoc = crewDoc.get("hosts", new ArrayList<Document>().getClass());
+        Iterator<Document> hostcursor = hostsDoc.iterator();
+        ArrayList<Host> hosts = hostDataMapper.getHostsArrayList(hostcursor);
+
+        ArrayList<String> airplaneLevels = crewDoc.get("airplaneLevels", new ArrayList<String>().getClass());
+
+        Boolean isAvailable = crewDoc.getBoolean("isAvailable");
+
+        return new Crew(crewId, pilot, co_pilots, hosts, airplaneLevels, isAvailable);
+    }
+
     private ArrayList<Crew> getCrewArrayList(MongoCursor<Document> cursor) {
         ArrayList<Crew> crews = new ArrayList<Crew>();
 
         while (cursor.hasNext()) {
             Document crewDoc = cursor.next();
 
-            ObjectId crewId = crewDoc.getObjectId("_id");
-            Pilot pilot = (Pilot) userDataMapper.createUserObj((Document) crewDoc.get("Pilot"));
-
-            ArrayList<Pilot> co_pilots = new ArrayList<Pilot>();
-            ArrayList<Document> coPilotsDoc = crewDoc.get("coPilots", new ArrayList<Document>().getClass());
-            coPilotsDoc.forEach((coPilot) -> {
-                co_pilots.add((Pilot) userDataMapper.createUserObj((Document) coPilot));
-            });
-
-            ArrayList<Document> hostsDoc = crewDoc.get("hosts", new ArrayList<Document>().getClass());
-            Iterator<Document> hostcursor = hostsDoc.iterator();
-            ArrayList<Host> hosts = hostDataMapper.getHostsArrayList(hostcursor);
-
-            ArrayList<String> airplaneLevels = crewDoc.get("airplaneLevels", new ArrayList<String>().getClass());
-
-            Boolean isAvailable = crewDoc.getBoolean("isAvailable");
-
-            Crew crew = new Crew(crewId, pilot, co_pilots, hosts, airplaneLevels, isAvailable);
-            crews.add(crew);
+            crews.add(createCrewObj(crewDoc));
         }
 
         return crews;

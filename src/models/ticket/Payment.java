@@ -13,6 +13,9 @@ public class Payment {
         this.expiredDate = LocalDate.parse(expiredDate);
     }
 
+    public Payment() {
+    }
+
     public String getCreditcardNumber() {
         return creditcardNumber;
     }

@@ -50,12 +50,10 @@ public abstract class User {
 
     public User login(String email, String password) {
         User user = this.mapper.findUser(email, password);
-
         if (user == null) {
             System.out.println("wrong email or password");
             return null;
         }
-
         return user;
     }
 

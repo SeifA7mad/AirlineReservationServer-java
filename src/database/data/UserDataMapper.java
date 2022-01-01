@@ -24,7 +24,8 @@ public class UserDataMapper {
                 .append("Lname", user.getLname()).append("DOB",
                         user.getDOB().toString())
                 .append("phoneNo", user.getPhoneNo()).append("gender", user.getGender()).append("account",
-                        userAccountDoc).append("tickets", new ArrayList<Document>());
+                        userAccountDoc)
+                .append("tickets", new ArrayList<Document>());
 
         if (user.getUserId() != null) {
             userDoc.append("_id", user.getUserId());
@@ -33,7 +34,12 @@ public class UserDataMapper {
         if (user.getAcc().getAccountType() == "pilot") {
             userDoc.append("expirence", ((Pilot) user).getExpirence());
         } else if (user.getAcc().getAccountType() == "passenger") {
-            userDoc.append("companions", ((Passenger) user).getCompanions());
+            ArrayList<ObjectId> companionsDoc = new ArrayList<ObjectId>();
+
+            ((Passenger) user).getCompanions().forEach((companion) -> {
+                companionsDoc.add(companion.getUserId());
+            });
+            userDoc.append("companions", companionsDoc);
         }
         return userDoc;
     }
@@ -67,8 +73,12 @@ public class UserDataMapper {
 
             // CHECK IF COMPANION != NULL AND TICKETS != NULL
             ArrayList<ObjectId> companionsDoc = userDoc.get("companions", new ArrayList<ObjectId>().getClass());
-            ArrayList<Passenger> companions = new ArrayList<Passenger>(); 
+            ArrayList<Passenger> companions = new ArrayList<Passenger>();
             ArrayList<Ticket> tickets = new ArrayList<Ticket>();
+
+            companionsDoc.forEach((id) -> {
+                companions.add((Passenger) findPassengerBy(id));
+            });
 
             user = new Passenger(userId, passportID, Fname, Lname, DOB, phoneNo, gender,
                     username, email, password, companions, tickets);
@@ -83,6 +93,22 @@ public class UserDataMapper {
     public User findUser(String userEmail, String userPassword) {
         Document userDoc = (Document) userCollection.find(Filters.and(Filters.eq("account.password",
                 userPassword), Filters.eq("account.email", userEmail))).first();
+        if (userDoc == null) {
+            return null;
+        }
+        return createUserObj(userDoc);
+    }
+
+    public User findPassengerBy(String email) {
+        Document userDoc = (Document) userCollection.find(Filters.eq("account.email", email)).first();
+        if (userDoc == null) {
+            return null;
+        }
+        return createUserObj(userDoc);
+    }
+
+    public User findPassengerBy(ObjectId id) {
+        Document userDoc = (Document) userCollection.find(Filters.eq("_id", id)).first();
         if (userDoc == null) {
             return null;
         }

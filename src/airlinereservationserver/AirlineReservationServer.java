@@ -19,6 +19,8 @@ import models.airline.Crew;
 import models.airline.Host;
 import models.airline.airlineTrip.AirlineTrip;
 import models.airline.airlineTrip.AirlineTripDetatils;
+import models.ticket.Payment;
+import models.ticket.Ticket;
 import models.user.Passenger;
 import models.user.Pilot;
 import models.user.User;
@@ -108,9 +110,22 @@ public class AirlineReservationServer {
         // airlineTrip.addAirlineTrip(airplanes.get(0), airports.get(0), airports.get(1), new AirlineTripDetatils("2017-01-13T17:09:42.411", "2017-01-13T17:09:42.411", 1, 1), 200, crews.get(0));
 
         // // INSERT PASSENGER TEST
-        // Passenger pa1 = new Passenger("A434343", "Karim", "Rafaat", "2000-11-10", "010220910", 'M', "karim", "karim@test.com", "123");
+        // Passenger pa1 = new Passenger("A43454343", "Shiko", "Ahmad", "2000-11-10", "010220910", 'M', "shiko", "shiko@test.com", "123");
         // pa1.insertPassenger();
 
+        // LOGIN TEST
+        User p = new Passenger();
+        Passenger pa = (Passenger) p.login("karim@test.com", "123");
+
+        // ArrayList<String> companionsEmails = new ArrayList<String>();
+        // companionsEmails.add("shiko@test.com");
+        // pa.addCompanions(companionsEmails);
+
+        AirlineTrip a = new AirlineTrip();
+        ArrayList<AirlineTrip> airlines = new ArrayList<AirlineTrip>();
+        airlines.add(a.getAirlineTripsBy("Cairo", "London").get(0));
+        Ticket t = new Ticket();
+        t.bookTicket(airlines, pa, 0, false, "Economy", new Payment("83938290832", "Karim", "2000-11-10"));
     }
 
 }

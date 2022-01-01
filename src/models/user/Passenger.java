@@ -26,10 +26,14 @@ public class Passenger extends User implements AirlineTripObserver {
 
     public Passenger(ObjectId userId, String passportID, String Fname, String Lname,
             String DOB, String phoneNo, char gender,
-            String username, String email, String password, ArrayList<Passenger> companions, ArrayList<Ticket> tickets) {
+            String username, String email, String password, ArrayList<Passenger> companions,
+            ArrayList<Ticket> tickets) {
         super(userId, passportID, Fname, Lname, DOB, phoneNo, gender, username, email, password, "passenger");
         this.companions = companions;
         this.tickets = tickets;
+    }
+
+    public Passenger() {
     }
 
     public void insertPassenger() {
@@ -43,6 +47,14 @@ public class Passenger extends User implements AirlineTripObserver {
     public void addBookedTicket(Ticket ticket) {
         this.tickets.add(ticket);
         passengerMapper.updateTickets(ticket, this);
+    }
+
+    public void addCompanions(ArrayList<String> companionsEmails) {
+        companionsEmails.forEach((email) -> {
+            Passenger companion = (Passenger) mapper.findPassengerBy(email);
+            this.companions.add(companion);
+            passengerMapper.updateCompanions(companion, this);
+        });
     }
 
     @Override

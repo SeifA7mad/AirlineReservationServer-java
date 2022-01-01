@@ -51,35 +51,39 @@ public class AirplaneDataMapper {
         airplaneCollection.insertOne(airplaneDoc);
     }
 
+    public Airplane createAirplaneObj(Document airplaneDoc) {
+
+        ObjectId airplaneID = airplaneDoc.getObjectId("_id");
+        String name = airplaneDoc.getString("name");
+        String type = airplaneDoc.getString("type");
+        Boolean onDuty = airplaneDoc.getBoolean("onDuty");
+        String level = airplaneDoc.getString("level");
+
+        ArrayList<Document> seatsDoc = airplaneDoc.get("seats", new ArrayList<Document>().getClass());
+
+        ArrayList<Seat> seats = new ArrayList<Seat>();
+
+        seatsDoc.forEach((seatDoc) -> {
+            seats.add(new Seat(seatDoc.getBoolean("availablility"), seatDoc.getString("seatType")));
+        });
+
+        int maxSeatsCapacity = airplaneDoc.getInteger("maxSeatsCapacity", 0);
+        int maxWeightPerSeat = airplaneDoc.getInteger("maxWeightPerSeat", 0);
+        int maxBusnissSeats = airplaneDoc.getInteger("maxBusnissSeats", 0);
+        int maxWeightCapacity = airplaneDoc.getInteger("maxWeightCapacity", 0);
+        double maxTravelDistance = airplaneDoc.getDouble("maxTravelDistance");
+
+        return new Airplane(airplaneID, name, type, onDuty, level, seats, maxSeatsCapacity,
+                maxBusnissSeats, maxWeightPerSeat, maxWeightCapacity, maxTravelDistance);
+    }
+
     private ArrayList<Airplane> getAirplanesArrayList(MongoCursor<Document> cursor) {
         ArrayList<Airplane> airplanes = new ArrayList<Airplane>();
 
         while (cursor.hasNext()) {
             Document airplaneDoc = cursor.next();
 
-            ObjectId airplaneID = airplaneDoc.getObjectId("_id");
-            String name = airplaneDoc.getString("name");
-            String type = airplaneDoc.getString("type");
-            Boolean onDuty = airplaneDoc.getBoolean("onDuty");
-            String level = airplaneDoc.getString("level");
-
-            ArrayList<Document> seatsDoc = airplaneDoc.get("seats", new ArrayList<Document>().getClass());
-
-            ArrayList<Seat> seats = new ArrayList<Seat>();
-
-            seatsDoc.forEach((seatDoc) -> {
-                seats.add(new Seat(seatDoc.getBoolean("availablility"), seatDoc.getString("seatType")));
-            });
-
-            int maxSeatsCapacity = airplaneDoc.getInteger("maxSeatsCapacity", 0);
-            int maxWeightPerSeat = airplaneDoc.getInteger("maxWeightPerSeat", 0);
-            int maxBusnissSeats = airplaneDoc.getInteger("maxBusnissSeats", 0);
-            int maxWeightCapacity = airplaneDoc.getInteger("maxWeightCapacity", 0);
-            double maxTravelDistance = airplaneDoc.getDouble("maxTravelDistance");
-
-            Airplane airplane = new Airplane(airplaneID, name, type, onDuty, level, seats, maxSeatsCapacity,
-                    maxBusnissSeats, maxWeightPerSeat, maxWeightCapacity, maxTravelDistance);
-            airplanes.add(airplane);
+            airplanes.add(createAirplaneObj(airplaneDoc));
         }
 
         return airplanes;

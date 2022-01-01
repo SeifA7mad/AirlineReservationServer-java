@@ -10,6 +10,12 @@ public class Seat {
         this.seatType = seatType;
     }
 
+    public Seat(int seatID, boolean availablility, String seatType) {
+        this.seatID = seatID;
+        this.availablility = availablility;
+        this.seatType = seatType;
+    }
+
     public int getSeatID() {
         return seatID;
     }

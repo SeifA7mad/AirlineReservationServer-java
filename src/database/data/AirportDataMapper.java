@@ -28,20 +28,23 @@ public class AirportDataMapper {
         airportCollection.insertOne(airportDoc);
     }
 
+    public Airport createAirportObj(Document airportDoc) {
+        ObjectId airportID = airportDoc.getObjectId("_id");
+        String name = airportDoc.getString("name");
+        String country = airportDoc.getString("country");
+        ArrayList<Integer> terminalNumber = airportDoc.get("terminalNumbers", new ArrayList<Integer>().getClass());
+        ArrayList<Integer> hallNumber = airportDoc.get("hallNumbers", new ArrayList<Integer>().getClass());
+
+        return new Airport(airportID, name, country, terminalNumber, hallNumber);
+    }
+
     private ArrayList<Airport> getAirportsArrayList(MongoCursor<Document> cursor) {
         ArrayList<Airport> airports = new ArrayList<Airport>();
 
         while (cursor.hasNext()) {
-            Document airplaneDoc = cursor.next();
+            Document airportDoc = cursor.next();
 
-            ObjectId airportID = airplaneDoc.getObjectId("_id");
-            String name = airplaneDoc.getString("name");
-            String country = airplaneDoc.getString("country");
-            ArrayList<Integer> terminalNumber = airplaneDoc.get("terminalNumbers", new ArrayList<Integer>().getClass());
-            ArrayList<Integer> hallNumber = airplaneDoc.get("hallNumbers", new ArrayList<Integer>().getClass());
-
-            Airport airport = new Airport(airportID, name, country, terminalNumber, hallNumber);
-            airports.add(airport);
+            airports.add(createAirportObj(airportDoc));
         }
 
         return airports;

@@ -52,8 +52,6 @@ public class AirlineTrip implements AirlineTripSubject {
         this.crew = crew;
 
         this.airlineTripState = airlineTripState;
-
-        mapper.insert(this);
     }
 
     public void addAirlineTrip(Airplane airplane, Airport origin, Airport destination,
@@ -72,6 +70,11 @@ public class AirlineTrip implements AirlineTripSubject {
         this.airplane.updateAirplane(true);
 
         mapper.insert(this);
+    }
+
+    public ArrayList<AirlineTrip> getAirlineTripsBy(String from, String to) {
+        ArrayList<AirlineTrip> airlineTrips = mapper.fetchAirlineTripsBy(from, to);
+        return airlineTrips;
     }
 
     @Override

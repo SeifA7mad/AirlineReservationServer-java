@@ -26,10 +26,9 @@ public class Ticket implements TicketPrototype {
 
     }
 
-    public Ticket(ObjectId ticketId, double price, int requestExtraWeight, boolean requestWheelChair, String type,
+    public Ticket(double price, int requestExtraWeight, boolean requestWheelChair, String type,
             TicketState ticketstate,
             HashMap<ObjectId, Seat> airlineTripSeats, Payment payment, Passenger passenger, Enquiry enquiry) {
-        this.ticketId = ticketId;
         this.price = price;
         this.requestExtraWeight = requestExtraWeight;
         this.requestWheelChair = requestWheelChair;
@@ -56,21 +55,31 @@ public class Ticket implements TicketPrototype {
 
     public void bookTicket(ArrayList<AirlineTrip> airlineTrips, Passenger passenger, int requestExtraWeight,
             boolean requestWheelChair, String ticketType, Payment payment) {
-        
+
+        boolean booked = false;
         this.requestExtraWeight = requestExtraWeight;
         this.requestWheelChair = requestWheelChair;
         this.type = ticketType;
         this.payment = payment;
         this.passenger = passenger;
+        this.price = this.requestExtraWeight * 10;
+        this.ticketstate = new BookingState();
+        this.airlineTripSeats = new HashMap<ObjectId, Seat>();
+
+        if (requestWheelChair) {
+            this.price += 50;
+        }
 
         // TODO: BOOK TICKET
-        airlineTrips.forEach((airlineTrip) -> {
-            Seat bookedSeat = airlineTrip.getFirstAvailableSeat(ticketType);
+        for (int i = 0; i < airlineTrips.size(); i++) {
+            Seat bookedSeat = airlineTrips.get(i).getFirstAvailableSeat(ticketType);
             if (bookedSeat == null) {
                 System.out.println("no available seats");
                 return;
             }
-            this.airlineTripSeats.put(airlineTrip.getAirlineTripID(), bookedSeat);
+
+            this.airlineTripSeats.put(airlineTrips.get(i).getAirlineTripID(), bookedSeat);
+            this.price += airlineTrips.get(i).getAirlineCost();
 
             // TODO: COMPANIONS BOOK ANOTHER SEAT NEW HASHMAP
             if (passenger.getCompanions().size() > 0) {
@@ -78,7 +87,17 @@ public class Ticket implements TicketPrototype {
                     companion.addBookedTicket((Ticket) this.clone(airlineTrips));
                 });
             }
-        });
+            booked = true;
+        }
+        if (booked) {
+            this.passenger.addBookedTicket(this);
+        }
+    }
+
+    public ArrayList<Ticket> getPassengerTickets(Passenger passenger) {
+        ArrayList<Ticket> passengers = null;
+
+        return passengers;
     }
 
     @Override

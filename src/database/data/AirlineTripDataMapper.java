@@ -3,16 +3,25 @@ package database.data;
 import java.util.ArrayList;
 
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
+import com.mongodb.client.model.Filters;
 
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
 import database.DatabaseConnection;
+import models.airline.*;
 import models.airline.airlineTrip.*;
+import models.airline.airlineTrip.airlineTripState.AirlineTripState;
+import models.airline.airlineTrip.airlineTripState.EndedState;
+import models.airline.airlineTrip.airlineTripState.PublishedState;
+import models.airline.airlineTrip.airlineTripState.UnpublishedState;
+import models.ticket.Ticket;
 
 public class AirlineTripDataMapper {
 
     private MongoCollection airlineTripCollection = DatabaseConnection.getCollection("airlineTrips");
+
     private AirplaneDataMapper airplaneDataMapper = new AirplaneDataMapper();
     private AirportDataMapper airportDataMapper = new AirportDataMapper();
     private CrewDataMapper crewDataMapper = new CrewDataMapper();
@@ -36,6 +45,9 @@ public class AirlineTripDataMapper {
         Document crewDoc = crewDataMapper.createCrewDocument(airlineTrip.getCrew());
         ArrayList<ObjectId> tickets = new ArrayList<ObjectId>();
 
+        ArrayList<Document> airlineDetails = new ArrayList<Document>();
+        airlineDetails.add(airlineTripDetailsDoc);
+
         Document airlineDoc = new Document().append("maxNumberOfTickets", airlineTrip.getMaxNumberOfTickets()).append(
                 "airplane",
                 airplaneDoc)
@@ -43,7 +55,7 @@ public class AirlineTripDataMapper {
                         originAirportDoc)
                 .append("destinationAirport", destinationAirportDoc)
                 .append("airlineTripDetatils",
-                        airlineTripDetailsDoc)
+                        airlineDetails)
                 .append("airlineCost", airlineTrip.getAirlineCost())
                 .append("crew", crewDoc).append("tickets", tickets)
                 .append("airlineTripStatus", airlineTrip.getAirlineTripState().getClass().getSimpleName());
@@ -54,4 +66,75 @@ public class AirlineTripDataMapper {
         Document airlineDoc = createAirlineTripDocument(airlineTrip);
         airlineTripCollection.insertOne(airlineDoc);
     }
+
+    public AirlineTripDetatils createAirlineTripDetatilsObj(Document airlineTripDetailsDoc) {
+        String depatureDateTime = airlineTripDetailsDoc.getString("depatureDateTime");
+        String arrivalDateTime = airlineTripDetailsDoc.getString("arrivalDateTime");
+        int destinationTerminalNo = airlineTripDetailsDoc.getInteger("destinationTerminalNo", 0);
+        int orginHallNo = airlineTripDetailsDoc.getInteger("orginHallNo", 0);
+
+        return new AirlineTripDetatils(depatureDateTime, arrivalDateTime, destinationTerminalNo, orginHallNo);
+    }
+
+    public AirlineTrip createAirlineTripObj(Document airlineTripDoc) {
+        ObjectId airlineTripID = airlineTripDoc.getObjectId("_id");
+        int maxNumberOfTickets = airlineTripDoc.getInteger("maxNumberOfTickets", 0);
+        Airplane airplane = airplaneDataMapper.createAirplaneObj((Document) airlineTripDoc.get("airplane"));
+        Airport origin = airportDataMapper.createAirportObj((Document) airlineTripDoc.get("orginAirport"));
+        Airport destination = airportDataMapper.createAirportObj((Document) airlineTripDoc.get("destinationAirport"));
+        ArrayList<Document> airlineTripDetailsDocs = airlineTripDoc.get("airlineTripDetatils",
+                new ArrayList<Document>().getClass());
+
+        ArrayList<AirlineTripDetatils> airlineTripDetails = new ArrayList<AirlineTripDetatils>();
+
+        airlineTripDetailsDocs.forEach((airlineTripDetailsDoc) -> {
+            airlineTripDetails.add(createAirlineTripDetatilsObj(airlineTripDetailsDoc));
+        });
+        double airlineCost = airlineTripDoc.getDouble("airlineCost");
+        Crew crew = crewDataMapper.createCrewObj((Document) airlineTripDoc.get("crew"));
+        ArrayList<Ticket> tickets = new ArrayList<Ticket>();
+
+        AirlineTripState airlineTripState;
+        String state = airlineTripDoc.getString("airlineTripStatus");
+
+        if (state.equals("PublishedState")) {
+            airlineTripState = new PublishedState();
+        } else if (state.equals("UnpublishedState")) {
+            airlineTripState = new UnpublishedState();
+        } else {
+            airlineTripState = new EndedState();
+        }
+
+        return new AirlineTrip(airlineTripID, maxNumberOfTickets, airplane, origin, destination, airlineTripDetails,
+                airlineCost, tickets, crew, airlineTripState);
+    }
+
+    private ArrayList<AirlineTrip> getAirlineArrayList(MongoCursor<Document> cursor) {
+        ArrayList<AirlineTrip> airlineTrips = new ArrayList<AirlineTrip>();
+
+        while (cursor.hasNext()) {
+            Document airlineTripDoc = cursor.next();
+
+            airlineTrips.add(createAirlineTripObj(airlineTripDoc));
+        };
+
+        return airlineTrips;
+    }
+
+    public ArrayList<AirlineTrip> fetchAirlineTripsBy(String from, String to) {
+
+        MongoCursor<Document> cursor = airlineTripCollection
+                .find(Filters.and(Filters.eq("orginAirport.name", from), Filters.eq("destinationAirport.name", to),
+                        Filters.eq("airlineTripStatus", "PublishedState"))).iterator();
+        
+
+        if (cursor == null) {
+            return null;
+        }
+
+        ArrayList<AirlineTrip> airlineTrips = getAirlineArrayList(cursor);
+
+        return airlineTrips;
+    }
+
 }
