@@ -16,17 +16,39 @@ import models.ticket.ticketState.EndBookingState;
 import models.ticket.ticketState.TicketState;
 
 public class TicketDataMapper {
+
+
+    public Seat createSeatObj(Document seatDoc) {
+        int seatID = seatDoc.getInteger("seatID", 0);
+        boolean availablility = seatDoc.getBoolean("availablility", false);
+        String seatType = seatDoc.getString("seatType");
+
+        return new Seat(seatID, availablility, seatType);
+    }
+
+    public Payment createPaymentObj(Document paymentDoc) {
+        String creditcardNumber = paymentDoc.getString("creditcardNumber");
+        String nameOnCard = paymentDoc.getString("nameOnCard");
+        String expiredDate = paymentDoc.getString("expiredDate");
+
+        return new Payment(creditcardNumber, nameOnCard, expiredDate);
+    }
+
+    public Enquiry createEnquiryObj(Document enquiryDoc) {
+        if (enquiryDoc == null) {
+            return null;
+        }
+        String title = enquiryDoc.getString("title");
+        String description = enquiryDoc.getString("description");
+
+        return new Enquiry(title, description);
+    }
+    
     public Document createSeatDocument(Seat seat) {
         Document seatDoc = new Document().append("seatId", seat.getSeatID())
                 .append("availablility", seat.isAvailablility()).append("seatType", seat.getSeatType());
         return seatDoc;
     }
-
-    public Seat createSeatObj(Document seatDoc) {
-
-        return new Seat(seatID, availablility, seatType);
-    }
-
     public Document createEnquiryDocument(Enquiry enquiry) {
 
         if (enquiry == null) {
@@ -72,6 +94,8 @@ public class TicketDataMapper {
         boolean requestWheelChair = ticketDoc.getBoolean("requestWheelChair", false);
         String type = ticketDoc.getString("type");
         String state = ticketDoc.getString("ticketstate");
+        Payment payment = createPaymentObj(ticketDoc.get("payment", Document.class));
+        Enquiry enquiry = createEnquiryObj(ticketDoc.get("enquiry", Document.class));
 
         TicketState ticketstate;
         if(state.equals("BookingState")) {
@@ -84,9 +108,9 @@ public class TicketDataMapper {
         HashMap<ObjectId, Seat> airlineTripSeats = new HashMap<ObjectId, Seat>();
 
         airlineTripSeatsDoc.forEach((doc) -> {
-            airlineTripSeats.put(doc.get("61d0ac6a14f4a48a344a7702"), doc.get("seat", Document.class));
+            airlineTripSeats.put(doc.getObjectId("airlineTripId"), createSeatObj(doc.get("seat", Document.class)));
         });
 
-        return new Ticket(price, requestExtraWeight, requestWheelChair, type, ticketstate, airlineTripSeats, payment, passenger, enquiry);
+        return new Ticket(price, requestExtraWeight, requestWheelChair, type, ticketstate, airlineTripSeats, payment, enquiry);
     }
 }

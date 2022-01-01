@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import org.bson.types.ObjectId;
 
+import database.data.TicketDataMapper;
 import models.airline.Seat;
 import models.airline.airlineTrip.AirlineTrip;
 import models.ticket.ticketState.*;
@@ -22,13 +23,14 @@ public class Ticket implements TicketPrototype {
     private Passenger passenger;
     private Enquiry enquiry;
 
+
     public Ticket() {
 
     }
 
     public Ticket(double price, int requestExtraWeight, boolean requestWheelChair, String type,
             TicketState ticketstate,
-            HashMap<ObjectId, Seat> airlineTripSeats, Payment payment, Passenger passenger, Enquiry enquiry) {
+            HashMap<ObjectId, Seat> airlineTripSeats, Payment payment, Enquiry enquiry) {
         this.price = price;
         this.requestExtraWeight = requestExtraWeight;
         this.requestWheelChair = requestWheelChair;
@@ -36,7 +38,6 @@ public class Ticket implements TicketPrototype {
         this.ticketstate = ticketstate;
         this.airlineTripSeats = airlineTripSeats;
         this.payment = payment;
-        this.passenger = passenger;
         this.enquiry = enquiry;
     }
 
@@ -94,11 +95,6 @@ public class Ticket implements TicketPrototype {
         }
     }
 
-    public ArrayList<Ticket> getPassengerTickets(Passenger passenger) {
-        ArrayList<Ticket> passengers = null;
-
-        return passengers;
-    }
 
     @Override
     public TicketPrototype clone(ArrayList<AirlineTrip> airlineTrips) {

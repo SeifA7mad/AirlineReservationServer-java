@@ -117,15 +117,17 @@ public class AirlineReservationServer {
         User p = new Passenger();
         Passenger pa = (Passenger) p.login("karim@test.com", "123");
 
+        System.out.println(pa.getPassengerTickets());
+
         // ArrayList<String> companionsEmails = new ArrayList<String>();
         // companionsEmails.add("shiko@test.com");
         // pa.addCompanions(companionsEmails);
 
-        AirlineTrip a = new AirlineTrip();
-        ArrayList<AirlineTrip> airlines = new ArrayList<AirlineTrip>();
-        airlines.add(a.getAirlineTripsBy("Cairo", "London").get(0));
-        Ticket t = new Ticket();
-        t.bookTicket(airlines, pa, 0, false, "Economy", new Payment("83938290832", "Karim", "2000-11-10"));
+        // AirlineTrip a = new AirlineTrip();
+        // ArrayList<AirlineTrip> airlines = new ArrayList<AirlineTrip>();
+        // airlines.add(a.getAirlineTripsBy("Cairo", "London").get(0));
+        // Ticket t = new Ticket();
+        // t.bookTicket(airlines, pa, 0, false, "Economy", new Payment("83938290832", "Karim", "2000-11-10"));
     }
 
 }

@@ -57,6 +57,11 @@ public class Passenger extends User implements AirlineTripObserver {
         });
     }
 
+    public ArrayList<Ticket> getPassengerTickets() {
+        ArrayList<Ticket> tickets = passengerMapper.fetchTickets(this);
+        return tickets;
+    }
+
     @Override
     public void update(AirlineTrip airlineTrip, String news) {
         // TODO Auto-generated method stub

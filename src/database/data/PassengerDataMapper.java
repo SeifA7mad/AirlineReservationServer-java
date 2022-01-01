@@ -58,8 +58,11 @@ public class PassengerDataMapper {
         ArrayList<Document> ticketsDocs = passengerDoc.get("tickets", new ArrayList<Document>().getClass());
 
         ArrayList<Ticket> tickets = new ArrayList<Ticket>();
-
-        return null;
+        ticketsDocs.forEach((ticketDoc) -> {
+            tickets.add(ticketDataMapper.createTicketObj(ticketDoc));
+        });
+        
+        return tickets;
     }
 
 }
