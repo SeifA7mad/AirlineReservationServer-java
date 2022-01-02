@@ -1,5 +1,6 @@
 package models.airline.airlineTrip;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 import org.bson.types.ObjectId;
@@ -71,12 +72,12 @@ public class AirlineTrip implements AirlineTripSubject {
         mapper.insert(this);
     }
 
-    public ArrayList<AirlineTrip> getAirlineTripsBy(String from, String to) {
+    public ArrayList<AirlineTrip> getAirlineTripsBy(String from, String to) throws RemoteException {
         ArrayList<AirlineTrip> airlineTrips = mapper.fetchAirlineTripsBy(from, to);
         return airlineTrips;
     }
 
-    public AirlineTrip getAirlineTripBy(ObjectId airlineTripId) {
+    public AirlineTrip getAirlineTripBy(ObjectId airlineTripId) throws RemoteException {
         return mapper.fetchAirlineTripBy(airlineTripId);
     }
 

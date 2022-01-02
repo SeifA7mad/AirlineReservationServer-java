@@ -1,5 +1,6 @@
 package database.data;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 import com.mongodb.client.MongoCollection;
@@ -28,7 +29,7 @@ public class AirportDataMapper {
         airportCollection.insertOne(airportDoc);
     }
 
-    public Airport createAirportObj(Document airportDoc) {
+    public Airport createAirportObj(Document airportDoc) throws RemoteException {
         ObjectId airportID = airportDoc.getObjectId("_id");
         String name = airportDoc.getString("name");
         String country = airportDoc.getString("country");
@@ -44,7 +45,11 @@ public class AirportDataMapper {
         while (cursor.hasNext()) {
             Document airportDoc = cursor.next();
 
-            airports.add(createAirportObj(airportDoc));
+            try {
+                airports.add(createAirportObj(airportDoc));
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
         }
 
         return airports;

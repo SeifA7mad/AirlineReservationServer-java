@@ -1,5 +1,6 @@
 package database.data;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 import com.mongodb.client.MongoCollection;
@@ -82,7 +83,7 @@ public class AirlineTripDataMapper {
         return new AirlineTripDetatils(depatureDateTime, arrivalDateTime, destinationTerminalNo, orginHallNo);
     }
 
-    public AirlineTrip createAirlineTripObj(Document airlineTripDoc) {
+    public AirlineTrip createAirlineTripObj(Document airlineTripDoc) throws RemoteException {
         ObjectId airlineTripID = airlineTripDoc.getObjectId("_id");
         int maxNumberOfTickets = airlineTripDoc.getInteger("maxNumberOfTickets", 0);
         Airplane airplane = airplaneDataMapper.createAirplaneObj((Document) airlineTripDoc.get("airplane"));
@@ -114,7 +115,7 @@ public class AirlineTripDataMapper {
                 airlineCost, tickets, crew, airlineTripState);
     }
 
-    private ArrayList<AirlineTrip> getAirlineArrayList(MongoCursor<Document> cursor) {
+    private ArrayList<AirlineTrip> getAirlineArrayList(MongoCursor<Document> cursor) throws RemoteException {
         ArrayList<AirlineTrip> airlineTrips = new ArrayList<AirlineTrip>();
 
         while (cursor.hasNext()) {
@@ -126,7 +127,7 @@ public class AirlineTripDataMapper {
         return airlineTrips;
     }
 
-    public ArrayList<AirlineTrip> fetchAirlineTripsBy(String from, String to) {
+    public ArrayList<AirlineTrip> fetchAirlineTripsBy(String from, String to) throws RemoteException {
 
         MongoCursor<Document> cursor = airlineTripCollection
                 .find(Filters.and(Filters.eq("orginAirport.name", from), Filters.eq("destinationAirport.name", to),
@@ -142,7 +143,7 @@ public class AirlineTripDataMapper {
         return airlineTrips;
     }
 
-    public AirlineTrip fetchAirlineTripBy(ObjectId airlineTripId) {
+    public AirlineTrip fetchAirlineTripBy(ObjectId airlineTripId) throws RemoteException {
         Document airlineTripDoc = (Document) airlineTripCollection.find(Filters.eq("_id", airlineTripId)).first();
 
         if (airlineTripDoc == null) {

@@ -1,12 +1,15 @@
 package models.airline;
 
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 
 import org.bson.types.ObjectId;
 
 import database.data.AirportDataMapper;
+import rmi.AirportInterface;
 
-public class Airport {
+public class Airport extends UnicastRemoteObject implements AirportInterface {
     private ObjectId airportID;
     private String name;
     private String country;
@@ -15,12 +18,12 @@ public class Airport {
 
     private AirportDataMapper mapper = new AirportDataMapper();
 
-    public Airport() {
+    public Airport() throws RemoteException {
 
     }
 
     public Airport(ObjectId airportID, String name, String country, ArrayList<Integer> terminalNumber,
-            ArrayList<Integer> hallNumber) {
+            ArrayList<Integer> hallNumber) throws RemoteException {
         this.airportID = airportID;
         this.name = name;
         this.country = country;
@@ -28,8 +31,9 @@ public class Airport {
         this.hallNumber = hallNumber;
     }
 
+    @Override
     public void addAirport(String name, String country, ArrayList<Integer> terminalNumber,
-            ArrayList<Integer> hallNumber) {
+            ArrayList<Integer> hallNumber) throws RemoteException {
         this.name = name;
         this.country = country;
         this.terminalNumber = terminalNumber;
@@ -38,7 +42,8 @@ public class Airport {
         mapper.insert(this);
     }
 
-    public ArrayList<Airport> getAirports() {
+    @Override
+    public ArrayList<Airport> getAirports() throws RemoteException {
         ArrayList<Airport> airports = null;
         airports = mapper.fetchAirports();
         if (airports == null) {
