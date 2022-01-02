@@ -22,6 +22,7 @@ import models.airline.airlineTrip.airlineTripState.UnpublishedState;
 import models.ticket.Ticket;
 import models.user.Passenger;
 import models.user.airlineTripObserver.AirlineTripObserver;
+import rmi.AirlineTripInterface;
 
 public class AirlineTripDataMapper {
 
@@ -43,11 +44,11 @@ public class AirlineTripDataMapper {
 
     public Document createAirlineTripDocument(AirlineTrip airlineTrip) {
 
-        Document airplaneDoc = airplaneDataMapper.createAirplaneDocument(airlineTrip.getAirplane());
-        Document originAirportDoc = airportDataMapper.createAirportDocument(airlineTrip.getOrigin());
-        Document destinationAirportDoc = airportDataMapper.createAirportDocument(airlineTrip.getDestination());
+        Document airplaneDoc = airplaneDataMapper.createAirplaneDocument((Airplane) airlineTrip.getAirplane());
+        Document originAirportDoc = airportDataMapper.createAirportDocument((Airport) airlineTrip.getOrigin());
+        Document destinationAirportDoc = airportDataMapper.createAirportDocument((Airport) airlineTrip.getDestination());
         Document airlineTripDetailsDoc = createAirlineTripDetailsDocument(airlineTrip.getAirlineTripDetails().get(0));
-        Document crewDoc = crewDataMapper.createCrewDocument(airlineTrip.getCrew());
+        Document crewDoc = crewDataMapper.createCrewDocument((Crew) airlineTrip.getCrew());
         ArrayList<ObjectId> tickets = new ArrayList<ObjectId>();
 
         ArrayList<Document> airlineDetails = new ArrayList<Document>();
@@ -115,8 +116,8 @@ public class AirlineTripDataMapper {
                 airlineCost, tickets, crew, airlineTripState);
     }
 
-    private ArrayList<AirlineTrip> getAirlineArrayList(MongoCursor<Document> cursor) throws RemoteException {
-        ArrayList<AirlineTrip> airlineTrips = new ArrayList<AirlineTrip>();
+    private ArrayList<AirlineTripInterface> getAirlineArrayList(MongoCursor<Document> cursor) throws RemoteException {
+        ArrayList<AirlineTripInterface> airlineTrips = new ArrayList<AirlineTripInterface>();
 
         while (cursor.hasNext()) {
             Document airlineTripDoc = cursor.next();
@@ -127,7 +128,7 @@ public class AirlineTripDataMapper {
         return airlineTrips;
     }
 
-    public ArrayList<AirlineTrip> fetchAirlineTripsBy(String from, String to) throws RemoteException {
+    public ArrayList<AirlineTripInterface> fetchAirlineTripsBy(String from, String to) throws RemoteException {
 
         MongoCursor<Document> cursor = airlineTripCollection
                 .find(Filters.and(Filters.eq("orginAirport.name", from), Filters.eq("destinationAirport.name", to),
@@ -138,7 +139,7 @@ public class AirlineTripDataMapper {
             return null;
         }
 
-        ArrayList<AirlineTrip> airlineTrips = getAirlineArrayList(cursor);
+        ArrayList<AirlineTripInterface> airlineTrips = getAirlineArrayList(cursor);
 
         return airlineTrips;
     }

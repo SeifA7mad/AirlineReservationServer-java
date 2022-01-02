@@ -1,6 +1,8 @@
 package models.airline.airlineTrip;
 
+import java.io.Serializable;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 
 import org.bson.types.ObjectId;
@@ -14,33 +16,37 @@ import models.airline.airlineTrip.airlineTripState.*;
 import models.ticket.Ticket;
 
 import models.user.airlineTripObserver.AirlineTripObserver;
+import rmi.AirlineTripInterface;
+import rmi.AirplaneInterface;
+import rmi.AirportInterface;
+import rmi.CrewInterface;
 
-public class AirlineTrip implements AirlineTripSubject {
+public class AirlineTrip extends UnicastRemoteObject implements AirlineTripSubject, AirlineTripInterface, Serializable {
 
     private ObjectId airlineTripID;
     private int maxNumberOfTickets;
-    private Airplane airplane;
+    private AirplaneInterface airplane;
 
-    private Airport origin;
-    private Airport destination;
+    private AirportInterface origin;
+    private AirportInterface destination;
     private ArrayList<AirlineTripDetatils> airlineTripDetails;
     private double airlineCost;
     private ArrayList<Ticket> tickets;
-    private Crew crew;
+    private CrewInterface crew;
 
     private AirlineTripDataMapper mapper = new AirlineTripDataMapper();
 
     private AirlineTripState airlineTripState;
     private ArrayList<AirlineTripObserver> passengerObservers = new ArrayList<AirlineTripObserver>();
 
-    public AirlineTrip() {
+    public AirlineTrip() throws RemoteException {
         this.airlineTripDetails = new ArrayList<AirlineTripDetatils>();
     }
 
     public AirlineTrip(ObjectId airlineTripID, int maxNumberOfTickets, Airplane airplane, Airport origin,
             Airport destination,
             ArrayList<AirlineTripDetatils> airlineTripDetails, double airlineCost, ArrayList<Ticket> tickets,
-            Crew crew, AirlineTripState airlineTripState) {
+            Crew crew, AirlineTripState airlineTripState) throws RemoteException {
         this.airlineTripID = airlineTripID;
         this.maxNumberOfTickets = maxNumberOfTickets;
         this.airplane = airplane;
@@ -54,30 +60,39 @@ public class AirlineTrip implements AirlineTripSubject {
         this.airlineTripState = airlineTripState;
     }
 
-    public void addAirlineTrip(Airplane airplane, Airport origin, Airport destination,
-            AirlineTripDetatils airlineTripDetails, double airlineCost, Crew crew) {
+    public void addAirlineTrip(AirplaneInterface airplane, AirportInterface origin,
+            AirportInterface destination,
+            String depatureDateTime, String arrivalDateTime, int destinationTerminalNo, int orginHallNo,
+            double airlineCost, CrewInterface crew) {
         this.airplane = airplane;
-        this.maxNumberOfTickets = airplane.getSeats().size();
+        this.maxNumberOfTickets = ((Airplane)airplane).getSeats().size();
         this.origin = origin;
         this.destination = destination;
-        this.airlineTripDetails.add(airlineTripDetails);
+        this.airlineTripDetails = new ArrayList<AirlineTripDetatils>();
+        this.airlineTripDetails.add(new AirlineTripDetatils(depatureDateTime, arrivalDateTime, destinationTerminalNo, orginHallNo));
         this.airlineCost = airlineCost;
         this.crew = crew;
         this.tickets = new ArrayList<Ticket>();
         this.airlineTripState = new UnpublishedState();
 
-        this.crew.updateCrew(false);
-        this.airplane.updateAirplane(true);
+        ((Crew)this.crew).updateCrew(false);
+        ((Airplane)this.airplane).updateAirplane(true);
 
         mapper.insert(this);
     }
 
-    public ArrayList<AirlineTrip> getAirlineTripsBy(String from, String to) throws RemoteException {
-        ArrayList<AirlineTrip> airlineTrips = mapper.fetchAirlineTripsBy(from, to);
+    public ArrayList<AirlineTripInterface> getAirlineTripsBy(String from, String to) {
+        ArrayList<AirlineTripInterface> airlineTrips = null;
+        try {
+            airlineTrips = mapper.fetchAirlineTripsBy(from, to);
+        } catch (RemoteException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         return airlineTrips;
     }
 
-    public AirlineTrip getAirlineTripBy(ObjectId airlineTripId) throws RemoteException {
+    public AirlineTripInterface getAirlineTripBy(ObjectId airlineTripId) throws RemoteException {
         return mapper.fetchAirlineTripBy(airlineTripId);
     }
 
@@ -100,11 +115,11 @@ public class AirlineTrip implements AirlineTripSubject {
     public Seat getFirstAvailableSeat(String seatType) {
         Seat seat = null;
 
-        for (int i = 0; i < this.airplane.getSeats().size(); i++) {
-            if (this.airplane.getSeats().get(i).getSeatType().equals(seatType)
-                    && this.airplane.getSeats().get(i).isAvailablility()) {
-                this.airplane.getSeats().get(i).setAvailablility(false);
-                seat = this.airplane.getSeats().get(i);
+        for (int i = 0; i < ((Airplane)this.airplane).getSeats().size(); i++) {
+            if (((Airplane) this.airplane).getSeats().get(i).getSeatType().equals(seatType)
+                    && ((Airplane) this.airplane).getSeats().get(i).isAvailablility()) {
+                ((Airplane) this.airplane).getSeats().get(i).setAvailablility(false);
+                seat = ((Airplane) this.airplane).getSeats().get(i);
                 seat.setSeatID(i + 1);
                 break;
             }
@@ -127,7 +142,7 @@ public class AirlineTrip implements AirlineTripSubject {
         return false;
     }
 
-    public void requestToCancelAirlineTrip(AirlineTrip airlineTrip) {
+    public void requestToCancelAirlineTrip(AirlineTripInterface airlineTrip) {
         // TODO Auto-generated method stub
 
     }
@@ -140,19 +155,19 @@ public class AirlineTrip implements AirlineTripSubject {
         return this.maxNumberOfTickets;
     }
 
-    public Airplane getAirplane() {
+    public AirplaneInterface getAirplane() {
         return this.airplane;
     }
 
-    public Crew getCrew() {
+    public CrewInterface getCrew() {
         return this.crew;
     }
 
-    public Airport getOrigin() {
+    public AirportInterface getOrigin() {
         return this.origin;
     }
 
-    public Airport getDestination() {
+    public AirportInterface getDestination() {
         return this.destination;
     }
 
