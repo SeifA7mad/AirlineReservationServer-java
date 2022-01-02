@@ -58,8 +58,8 @@ public class HostDataMapper {
         return hosts;
     }
 
-    public ArrayList<Host> getHostsArrayList(Iterator<Document> cursor) {
-        ArrayList<Host> hosts = new ArrayList<Host>();
+    public ArrayList<HostInterface> getHostsArrayList(Iterator<Document> cursor) {
+        ArrayList<HostInterface> hosts = new ArrayList<HostInterface>();
 
         while (cursor.hasNext()) {
             Document hostDoc = cursor.next();

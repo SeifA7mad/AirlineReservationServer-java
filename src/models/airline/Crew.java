@@ -1,24 +1,30 @@
 package models.airline;
 
+import java.io.Serializable;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 
 import org.bson.types.ObjectId;
 
 import database.data.CrewDataMapper;
 
-import models.user.Pilot;
+import rmi.CrewInterface;
+import rmi.HostInterface;
+import rmi.PilotInterface;
 
-public class Crew {
+public class Crew extends UnicastRemoteObject implements CrewInterface, Serializable {
     private ObjectId crewId;
-    private Pilot pilot;
-    private ArrayList<Pilot> co_pilots;
-    private ArrayList<Host> hosts;
+    private PilotInterface pilot;
+    private ArrayList<PilotInterface> co_pilots;
+    private ArrayList<HostInterface> hosts;
     private ArrayList<String> airplaneLevels;
     private boolean isAvailable;
 
     private CrewDataMapper mapper = new CrewDataMapper();
 
-    public void createCrew(Pilot pilot, ArrayList<Pilot> co_pilots, ArrayList<Host> hosts,
+    public void createCrew(
+            PilotInterface pilot, ArrayList<PilotInterface> co_pilots, ArrayList<HostInterface> hosts,
             ArrayList<String> airplaneLevels) {
         this.pilot = pilot;
         this.co_pilots = co_pilots;
@@ -29,8 +35,9 @@ public class Crew {
         mapper.insert(this);
     }
 
-    public Crew(ObjectId crewId, Pilot pilot, ArrayList<Pilot> co_pilots, ArrayList<Host> hosts,
-            ArrayList<String> airplaneLevels, boolean isAvailable) {
+    public Crew(ObjectId crewId, 
+            PilotInterface pilot, ArrayList<PilotInterface> co_pilots, ArrayList<HostInterface> hosts,
+            ArrayList<String> airplaneLevels, boolean isAvailable) throws RemoteException {
         this.crewId = crewId;
         this.pilot = pilot;
         this.co_pilots = co_pilots;
@@ -39,11 +46,11 @@ public class Crew {
         this.isAvailable = isAvailable;
     }
 
-    public Crew() {
+    public Crew() throws RemoteException {
     }
 
-    public ArrayList<Crew> getCrews() {
-        ArrayList<Crew> crews = null;
+    public ArrayList<CrewInterface> getCrews() {
+        ArrayList<CrewInterface> crews = null;
         crews = mapper.fetchCrews();
         if (crews == null) {
             return null;
@@ -60,15 +67,15 @@ public class Crew {
         return crewId;
     }
 
-    public Pilot getPilot() {
+    public PilotInterface getPilot() {
         return pilot;
     }
 
-    public ArrayList<Pilot> getCo_pilots() {
+    public ArrayList<PilotInterface> getCo_pilots() {
         return co_pilots;
     }
 
-    public ArrayList<Host> getHosts() {
+    public ArrayList<HostInterface> getHosts() {
         return hosts;
     }
 

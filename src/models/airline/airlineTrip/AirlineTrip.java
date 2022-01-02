@@ -12,7 +12,7 @@ import models.airline.Crew;
 import models.airline.Seat;
 import models.airline.airlineTrip.airlineTripState.*;
 import models.ticket.Ticket;
-import models.user.Admin;
+
 import models.user.airlineTripObserver.AirlineTripObserver;
 
 public class AirlineTrip implements AirlineTripSubject {

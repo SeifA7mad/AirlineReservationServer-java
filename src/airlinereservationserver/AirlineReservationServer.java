@@ -29,6 +29,7 @@ import models.user.Pilot;
 import models.user.User;
 import rmi.AirplaneInterface;
 import rmi.AirportInterface;
+import rmi.CrewInterface;
 import rmi.HostInterface;
 
 public class AirlineReservationServer {
@@ -155,9 +156,18 @@ public class AirlineReservationServer {
         // // Host host = new Host();
         // // host.getAllHosts();
 
-        // // GET ALL CREWS TEST
-        // Crew crew = new Crew();
-        // ArrayList<Crew> crews = crew.getCrews();
+        // GET ALL CREWS TEST
+        // Crew crew;
+        // try {
+        //     crew = new Crew();
+        //     ArrayList<CrewInterface> crews = crew.getCrews();
+        //     System.out.println(((Crew)crews.get(0)).getCrewId());
+        // } catch (RemoteException e) {
+        //     // TODO Auto-generated catch block
+
+        //     e.printStackTrace();
+        // }
+
 
         // // INSERT AIRLINETRIP TEST
         // AirlineTrip airlineTrip = new AirlineTrip();

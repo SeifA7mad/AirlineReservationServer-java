@@ -6,8 +6,9 @@ import java.time.LocalDate;
 import org.bson.types.ObjectId;
 
 import database.data.UserDataMapper;
+import rmi.PilotInterface;
 
-public class Pilot extends User {
+public class Pilot extends User implements PilotInterface {
 
     private String expirence;
 

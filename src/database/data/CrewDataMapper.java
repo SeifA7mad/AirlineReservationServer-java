@@ -1,5 +1,6 @@
 package database.data;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -15,6 +16,9 @@ import database.DatabaseConnection;
 import models.airline.Crew;
 import models.airline.Host;
 import models.user.Pilot;
+import rmi.CrewInterface;
+import rmi.HostInterface;
+import rmi.PilotInterface;
 
 public class CrewDataMapper {
     private MongoCollection crewCollection = DatabaseConnection.getCollection("crews");
@@ -23,17 +27,17 @@ public class CrewDataMapper {
     private HostDataMapper hostDataMapper = new HostDataMapper();
 
     public Document createCrewDocument(Crew crew) {
-        Document pilotDoc = userDataMapper.createUserDocument(crew.getPilot());
+        Document pilotDoc = userDataMapper.createUserDocument((Pilot)crew.getPilot());
 
         ArrayList<Document> coPioltsDoc = new ArrayList<Document>();
         crew.getCo_pilots().forEach((coPilot) -> {
-            Document coPilotDoc = userDataMapper.createUserDocument(coPilot);
+            Document coPilotDoc = userDataMapper.createUserDocument((Pilot)coPilot);
             coPioltsDoc.add(coPilotDoc);
         });
 
         ArrayList<Document> hostsDoc = new ArrayList<Document>();
         crew.getHosts().forEach((host) -> {
-            Document hostDoc = hostDataMapper.createHostDocument(host);
+            Document hostDoc = hostDataMapper.createHostDocument((Host)host);
             hostsDoc.add(hostDoc);
         });
 
@@ -60,7 +64,7 @@ public class CrewDataMapper {
         ObjectId crewId = crewDoc.getObjectId("_id");
         Pilot pilot = (Pilot) userDataMapper.createUserObj((Document) crewDoc.get("Pilot"));
 
-        ArrayList<Pilot> co_pilots = new ArrayList<Pilot>();
+        ArrayList<PilotInterface> co_pilots = new ArrayList<PilotInterface>();
         ArrayList<Document> coPilotsDoc = crewDoc.get("coPilots", new ArrayList<Document>().getClass());
         coPilotsDoc.forEach((coPilot) -> {
             co_pilots.add((Pilot) userDataMapper.createUserObj((Document) coPilot));
@@ -68,17 +72,23 @@ public class CrewDataMapper {
 
         ArrayList<Document> hostsDoc = crewDoc.get("hosts", new ArrayList<Document>().getClass());
         Iterator<Document> hostcursor = hostsDoc.iterator();
-        ArrayList<Host> hosts = hostDataMapper.getHostsArrayList(hostcursor);
+        ArrayList<HostInterface> hosts = hostDataMapper.getHostsArrayList(hostcursor);
 
         ArrayList<String> airplaneLevels = crewDoc.get("airplaneLevels", new ArrayList<String>().getClass());
 
         Boolean isAvailable = crewDoc.getBoolean("isAvailable");
 
-        return new Crew(crewId, pilot, co_pilots, hosts, airplaneLevels, isAvailable);
+        try {
+            return new Crew(crewId, pilot, co_pilots, hosts, airplaneLevels, isAvailable);
+        } catch (RemoteException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return null;
+        }
     }
 
-    private ArrayList<Crew> getCrewArrayList(MongoCursor<Document> cursor) {
-        ArrayList<Crew> crews = new ArrayList<Crew>();
+    private ArrayList<CrewInterface> getCrewArrayList(MongoCursor<Document> cursor) {
+        ArrayList<CrewInterface> crews = new ArrayList<CrewInterface>();
 
         while (cursor.hasNext()) {
             Document crewDoc = cursor.next();
@@ -89,15 +99,14 @@ public class CrewDataMapper {
         return crews;
     }
 
-    public ArrayList<Crew> fetchCrews() {
+    public ArrayList<CrewInterface> fetchCrews() {
 
         MongoCursor<Document> cursor = crewCollection.find().iterator();
 
         if (cursor == null) {
             return null;
         }
-
-        ArrayList<Crew> crews = getCrewArrayList(cursor);
+        ArrayList<CrewInterface> crews = getCrewArrayList(cursor);
 
         return crews;
     }

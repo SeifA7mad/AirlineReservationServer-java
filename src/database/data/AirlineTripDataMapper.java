@@ -98,7 +98,7 @@ public class AirlineTripDataMapper {
             airlineTripDetails.add(createAirlineTripDetatilsObj(airlineTripDetailsDoc));
         });
         double airlineCost = airlineTripDoc.getDouble("airlineCost");
-        Crew crew = crewDataMapper.createCrewObj((Document) airlineTripDoc.get("crew"));
+        Crew crew = (Crew) crewDataMapper.createCrewObj((Document) airlineTripDoc.get("crew"));
         ArrayList<Ticket> tickets = new ArrayList<Ticket>();
 
         AirlineTripState airlineTripState;
