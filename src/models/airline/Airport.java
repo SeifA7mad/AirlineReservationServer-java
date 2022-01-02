@@ -1,5 +1,6 @@
 package models.airline;
 
+import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
@@ -9,7 +10,7 @@ import org.bson.types.ObjectId;
 import database.data.AirportDataMapper;
 import rmi.AirportInterface;
 
-public class Airport extends UnicastRemoteObject implements AirportInterface {
+public class Airport extends UnicastRemoteObject implements AirportInterface, Serializable {
     private ObjectId airportID;
     private String name;
     private String country;

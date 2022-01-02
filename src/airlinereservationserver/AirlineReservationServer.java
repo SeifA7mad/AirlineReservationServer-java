@@ -4,6 +4,8 @@
  */
 package airlinereservationserver;
 
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.util.ArrayList;
 
 import com.mongodb.client.MongoCollection;
@@ -24,6 +26,7 @@ import models.ticket.Ticket;
 import models.user.Passenger;
 import models.user.Pilot;
 import models.user.User;
+import rmi.AirportInterface;
 
 public class AirlineReservationServer {
 
@@ -31,6 +34,21 @@ public class AirlineReservationServer {
         DatabaseConnection.createDatabaseConnection();
         MongoDatabase mongoDatabase = DatabaseConnection.getMongoDatabase();
         System.out.println("server is running");
+
+        try {
+            // My remote object [Skeleton]
+            AirportInterface airportInterface = new Airport();
+
+            // My RMI Registry
+            Registry registry = LocateRegistry.createRegistry(1099);
+
+            // Add my object to the RMI Registry
+            registry.bind("airport", airportInterface);
+
+            System.out.println("My AIRPORT is ready...");
+        } catch (Exception ex) {
+            System.out.println("Exception occured");
+        }
 
         // ADD AIRPORT TEST
         // Airport a = new Airport();
