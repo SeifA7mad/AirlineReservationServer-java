@@ -16,6 +16,7 @@ import database.DatabaseConnection;
 
 import models.airline.Airplane;
 import models.airline.Seat;
+import rmi.AirplaneInterface;
 
 public class AirplaneDataMapper {
     private MongoCollection airplaneCollection = DatabaseConnection.getCollection("airplanes");
@@ -83,8 +84,8 @@ public class AirplaneDataMapper {
         }
     }
 
-    private ArrayList<Airplane> getAirplanesArrayList(MongoCursor<Document> cursor) {
-        ArrayList<Airplane> airplanes = new ArrayList<Airplane>();
+    private ArrayList<AirplaneInterface> getAirplanesArrayList(MongoCursor<Document> cursor) {
+        ArrayList<AirplaneInterface> airplanes = new ArrayList<AirplaneInterface>();
 
         while (cursor.hasNext()) {
             Document airplaneDoc = cursor.next();
@@ -95,7 +96,7 @@ public class AirplaneDataMapper {
         return airplanes;
     }
 
-    public ArrayList<Airplane> fetchAirplanes() {
+    public ArrayList<AirplaneInterface> fetchAirplanes() {
 
         MongoCursor<Document> cursor = airplaneCollection.find().iterator();
 
@@ -103,7 +104,7 @@ public class AirplaneDataMapper {
             return null;
         }
 
-        ArrayList<Airplane> airplanes = getAirplanesArrayList(cursor);
+        ArrayList<AirplaneInterface> airplanes = getAirplanesArrayList(cursor);
 
         return airplanes;
     }

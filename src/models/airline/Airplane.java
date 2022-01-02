@@ -70,8 +70,8 @@ public class Airplane extends UnicastRemoteObject implements AirplaneInterface, 
         mapper.insert(this);
     }
 
-    public ArrayList<Airplane> getAirplanes() throws RemoteException {
-        ArrayList<Airplane> airplanes = null;
+    public ArrayList<AirplaneInterface> getAirplanes() throws RemoteException {
+        ArrayList<AirplaneInterface> airplanes = null;
         airplanes = mapper.fetchAirplanes();
         if (airplanes == null) {
             return null;
