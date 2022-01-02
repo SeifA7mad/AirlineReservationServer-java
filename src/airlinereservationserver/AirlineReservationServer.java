@@ -114,15 +114,15 @@ public class AirlineReservationServer {
         // pa1.insertPassenger();
 
         // LOGIN TEST
-        User p = new Passenger();
-        Passenger pa = (Passenger) p.login("karim@test.com", "123");
+        // User p = new Passenger();
+        // Passenger pa = (Passenger) p.login("karim@test.com", "123");
 
-        System.out.println(pa.getPassengerTickets());
+        // //ADD COMAPNIONS TEST
+        // // ArrayList<String> companionsEmails = new ArrayList<String>();
+        // // companionsEmails.add("shiko@test.com");
+        // // pa.addCompanions(companionsEmails);
 
-        // ArrayList<String> companionsEmails = new ArrayList<String>();
-        // companionsEmails.add("shiko@test.com");
-        // pa.addCompanions(companionsEmails);
-
+        // //BOOK TICKET TEST
         // AirlineTrip a = new AirlineTrip();
         // ArrayList<AirlineTrip> airlines = new ArrayList<AirlineTrip>();
         // airlines.add(a.getAirlineTripsBy("Cairo", "London").get(0));

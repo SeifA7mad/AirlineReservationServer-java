@@ -12,7 +12,7 @@ public class EndedState extends AirlineTripState {
 
     @Override
     public boolean cancelAirlineTrip(AirlineTrip airlineTrip) {
-        // TODO Auto-generated method stub
+        System.out.println("cannot cancel an endded airline trip");
         return false;
     }
 

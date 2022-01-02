@@ -44,9 +44,13 @@ public class Passenger extends User implements AirlineTripObserver {
         return this.companions;
     }
 
-    public void addBookedTicket(Ticket ticket) {
+    public void addBookedTicket(Ticket ticket, ArrayList<AirlineTrip> airlineTrips) {
         this.tickets.add(ticket);
         passengerMapper.updateTickets(ticket, this);
+
+        airlineTrips.forEach((airlineTrip) -> {
+            airlineTrip.addObserver(this);
+        });
     }
 
     public void addCompanions(ArrayList<String> companionsEmails) {

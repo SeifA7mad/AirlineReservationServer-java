@@ -30,7 +30,6 @@ public class AirlineTrip implements AirlineTripSubject {
     private AirlineTripDataMapper mapper = new AirlineTripDataMapper();
 
     private AirlineTripState airlineTripState;
-    private AirlineTripObserver crewObserver;
     private ArrayList<AirlineTripObserver> passengerObservers;
 
     public AirlineTrip() {
@@ -82,12 +81,13 @@ public class AirlineTrip implements AirlineTripSubject {
     }
 
     @Override
-    public void addObserver(ArrayList<AirlineTripObserver> o) {
-        // TODO Auto-generated method stub
+    public void addObserver(AirlineTripObserver passenger) {
+        this.passengerObservers.add(passenger);
+        this.mapper.updatePassengerObservers(this, passenger);
     }
 
     @Override
-    public void removeObserver(AirlineTripObserver o) {
+    public void removeObserver(AirlineTripObserver passenger) {
         // TODO Auto-generated method stub
     }
 
@@ -122,6 +122,7 @@ public class AirlineTrip implements AirlineTripSubject {
 
     public boolean cancelAirlineTrip(AirlineTrip airlineTrip) {
         // TODO Auto-generated method stub
+        this.airlineTripState.cancelAirlineTrip(this);
         return false;
     }
 
@@ -164,6 +165,10 @@ public class AirlineTrip implements AirlineTripSubject {
 
     public AirlineTripState getAirlineTripState() {
         return this.airlineTripState;
+    }
+
+    public AirlineTripDataMapper getDataMapper() {
+        return this.mapper;
     }
 
 }

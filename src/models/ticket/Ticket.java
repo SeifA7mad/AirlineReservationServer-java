@@ -23,7 +23,6 @@ public class Ticket implements TicketPrototype {
     private Passenger passenger;
     private Enquiry enquiry;
 
-
     public Ticket() {
 
     }
@@ -42,8 +41,7 @@ public class Ticket implements TicketPrototype {
     }
 
     public Ticket(double price, int requestExtraWeight, boolean requestWheelChair, String type,
-            TicketState ticketstate, HashMap<ObjectId, Seat> airlineTripSeats, Payment payment,
-            Passenger passenger) {
+            TicketState ticketstate, HashMap<ObjectId, Seat> airlineTripSeats, Payment payment) {
         this.price = price;
         this.requestExtraWeight = requestExtraWeight;
         this.requestWheelChair = requestWheelChair;
@@ -51,7 +49,6 @@ public class Ticket implements TicketPrototype {
         this.ticketstate = ticketstate;
         this.airlineTripSeats = airlineTripSeats;
         this.payment = payment;
-        this.passenger = passenger;
     }
 
     public void bookTicket(ArrayList<AirlineTrip> airlineTrips, Passenger passenger, int requestExtraWeight,
@@ -71,30 +68,25 @@ public class Ticket implements TicketPrototype {
             this.price += 50;
         }
 
-        // TODO: BOOK TICKET
         for (int i = 0; i < airlineTrips.size(); i++) {
             Seat bookedSeat = airlineTrips.get(i).getFirstAvailableSeat(ticketType);
             if (bookedSeat == null) {
                 System.out.println("no available seats");
                 return;
             }
-
             this.airlineTripSeats.put(airlineTrips.get(i).getAirlineTripID(), bookedSeat);
             this.price += airlineTrips.get(i).getAirlineCost();
-
-            // TODO: COMPANIONS BOOK ANOTHER SEAT NEW HASHMAP
-            if (passenger.getCompanions().size() > 0) {
-                passenger.getCompanions().forEach((companion) -> {
-                    companion.addBookedTicket((Ticket) this.clone(airlineTrips));
-                });
-            }
             booked = true;
         }
         if (booked) {
-            this.passenger.addBookedTicket(this);
+            this.passenger.addBookedTicket(this, airlineTrips);
+            if (passenger.getCompanions().size() > 0) {
+                passenger.getCompanions().forEach((companion) -> {
+                    companion.addBookedTicket((Ticket) this.clone(airlineTrips), airlineTrips);
+                });
+            }
         }
     }
-
 
     @Override
     public TicketPrototype clone(ArrayList<AirlineTrip> airlineTrips) {
@@ -109,8 +101,7 @@ public class Ticket implements TicketPrototype {
             airlineSeats.put(airlineTrip.getAirlineTripID(), bookedSeat);
         });
 
-        return new Ticket(price, requestExtraWeight, requestWheelChair, type, ticketstate, airlineSeats, payment,
-                passenger);
+        return new Ticket(price, requestExtraWeight, requestWheelChair, type, ticketstate, airlineSeats, payment);
     }
 
     public ObjectId getTicketId() {

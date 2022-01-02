@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
+import com.mongodb.client.result.DeleteResult;
 
 import org.bson.Document;
 import org.bson.types.ObjectId;
@@ -17,6 +19,8 @@ import models.airline.airlineTrip.airlineTripState.EndedState;
 import models.airline.airlineTrip.airlineTripState.PublishedState;
 import models.airline.airlineTrip.airlineTripState.UnpublishedState;
 import models.ticket.Ticket;
+import models.user.Passenger;
+import models.user.airlineTripObserver.AirlineTripObserver;
 
 public class AirlineTripDataMapper {
 
@@ -58,7 +62,9 @@ public class AirlineTripDataMapper {
                         airlineDetails)
                 .append("airlineCost", airlineTrip.getAirlineCost())
                 .append("crew", crewDoc).append("tickets", tickets)
-                .append("airlineTripStatus", airlineTrip.getAirlineTripState().getClass().getSimpleName());
+                .append("airlineTripStatus", airlineTrip.getAirlineTripState().getClass().getSimpleName())
+                .append("passengersObservers", new ArrayList<ObjectId>());
+
         return airlineDoc;
     }
 
@@ -116,7 +122,7 @@ public class AirlineTripDataMapper {
             Document airlineTripDoc = cursor.next();
 
             airlineTrips.add(createAirlineTripObj(airlineTripDoc));
-        };
+        }
 
         return airlineTrips;
     }
@@ -125,8 +131,8 @@ public class AirlineTripDataMapper {
 
         MongoCursor<Document> cursor = airlineTripCollection
                 .find(Filters.and(Filters.eq("orginAirport.name", from), Filters.eq("destinationAirport.name", to),
-                        Filters.eq("airlineTripStatus", "PublishedState"))).iterator();
-        
+                        Filters.eq("airlineTripStatus", "PublishedState")))
+                .iterator();
 
         if (cursor == null) {
             return null;
@@ -146,4 +152,18 @@ public class AirlineTripDataMapper {
         return createAirlineTripObj(airlineTripDoc);
     }
 
+    public boolean removeAirlineTrip(ObjectId airlineTripId) {
+        try {
+            airlineTripCollection.deleteOne(Filters.eq("_id", airlineTripId));
+            return true;
+        } catch (UnsupportedOperationException e) {
+            System.out.println(e);
+            return false;
+        }
+    }
+
+    public void updatePassengerObservers(AirlineTrip airlineTrip, AirlineTripObserver passenger) {
+        airlineTripCollection.findOneAndUpdate(Filters.eq("_id", airlineTrip.getAirlineTripID()),
+                Updates.push("passengersObservers", ((Passenger) passenger).getUserId()));
+    }
 }
