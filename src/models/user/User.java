@@ -53,7 +53,7 @@ public abstract class User extends UnicastRemoteObject implements UserInterface 
     }
 
     public void createAccount(String passportID, String Fname, String Lname, String DOB, String phoneNo, char gender,
-            String username, String email, String password, String accType) {
+            String username, String email, String password, String accType) throws RemoteException {
         this.passportID = passportID;
         this.Fname = Fname;
         this.Lname = Lname;
@@ -104,6 +104,22 @@ public abstract class User extends UnicastRemoteObject implements UserInterface 
 
     public Account getAcc() {
         return acc;
+    }
+
+    public String getUsername() {
+        return this.acc.getUsername();
+    }
+
+    public String getEmail() {
+        return this.acc.getEmail();
+    }
+
+    public String getPassword() {
+        return this.acc.getPassword();
+    }
+
+    public String getAccountType() {
+        return this.acc.getAccountType();
     }
 
 }

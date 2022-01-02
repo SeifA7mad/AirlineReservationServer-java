@@ -21,7 +21,7 @@ import rmi.AirplaneInterface;
 public class AirplaneDataMapper {
     private MongoCollection airplaneCollection = DatabaseConnection.getCollection("airplanes");
 
-    public Document createAirplaneDocument(Airplane airplane) {
+    public Document createAirplaneDocument(AirplaneInterface airplane) throws RemoteException {
 
         ArrayList<Document> seatsDoc = new ArrayList<Document>();
         airplane.getSeats().forEach((seat) -> {
@@ -47,7 +47,7 @@ public class AirplaneDataMapper {
         return airplaneDoc;
     }
 
-    public void insert(Airplane airplane) {
+    public void insert(AirplaneInterface airplane) throws RemoteException {
         Document airplaneDoc = createAirplaneDocument(airplane);
 
         airplaneCollection.insertOne(airplaneDoc);

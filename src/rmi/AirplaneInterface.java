@@ -5,8 +5,7 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 import org.bson.types.ObjectId;
-
-import models.airline.Airplane;
+import models.airline.Seat;
 
 public interface AirplaneInterface extends Remote {
     public void addAirplane(String name, String type, String level, int maxSeatsCapacity, int maxBusnissSeats,
@@ -18,4 +17,11 @@ public interface AirplaneInterface extends Remote {
     public String getType() throws RemoteException;
     public boolean isOnDuty() throws RemoteException;
     public String getLevel() throws RemoteException;
+    public ArrayList<Seat> getSeats() throws RemoteException;
+    public void updateAirplane(boolean onDuty) throws RemoteException;
+    public int getMaxSeatsCapacity() throws RemoteException;;
+    public int getMaxWeightPerSeat() throws RemoteException;;
+    public int getMaxWeightCapacity() throws RemoteException;;
+    public int getMaxBusnissSeats() throws RemoteException;;
+    public double getMaxTravelDistance() throws RemoteException;;
 }

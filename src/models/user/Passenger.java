@@ -39,7 +39,7 @@ public class Passenger extends User implements AirlineTripObserver, PassengerInt
     public Passenger() throws RemoteException {
     }
 
-    public void insertPassenger() {
+    public void insertPassenger() throws RemoteException {
         this.mapper.insert(this);
     }
 

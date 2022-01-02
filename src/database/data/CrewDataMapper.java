@@ -26,19 +26,32 @@ public class CrewDataMapper {
     private UserDataMapper userDataMapper = new UserDataMapper();
     private HostDataMapper hostDataMapper = new HostDataMapper();
 
-    public Document createCrewDocument(Crew crew) {
-        Document pilotDoc = userDataMapper.createUserDocument((Pilot)crew.getPilot());
+    public Document createCrewDocument(CrewInterface crew) throws RemoteException {
+        Document pilotDoc = userDataMapper.createUserDocument(crew.getPilot());
 
         ArrayList<Document> coPioltsDoc = new ArrayList<Document>();
         crew.getCo_pilots().forEach((coPilot) -> {
-            Document coPilotDoc = userDataMapper.createUserDocument((Pilot)coPilot);
-            coPioltsDoc.add(coPilotDoc);
+            Document coPilotDoc;
+            try {
+                coPilotDoc = userDataMapper.createUserDocument(coPilot);
+                coPioltsDoc.add(coPilotDoc);
+            } catch (RemoteException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
         });
 
         ArrayList<Document> hostsDoc = new ArrayList<Document>();
         crew.getHosts().forEach((host) -> {
-            Document hostDoc = hostDataMapper.createHostDocument((Host)host);
-            hostsDoc.add(hostDoc);
+            Document hostDoc;
+            try {
+                hostDoc = hostDataMapper.createHostDocument(host);
+                hostsDoc.add(hostDoc);
+            } catch (RemoteException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         });
 
         ArrayList<String> airplaneLevels = new ArrayList<String>();
@@ -55,7 +68,7 @@ public class CrewDataMapper {
         return crewDoc;
     }
 
-    public void insert(Crew crew) {
+    public void insert(CrewInterface crew) throws RemoteException {
         Document crewDoc = createCrewDocument(crew);
         crewCollection.insertOne(crewDoc);
     }

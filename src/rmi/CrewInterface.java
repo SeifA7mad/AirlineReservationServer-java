@@ -20,4 +20,12 @@ public interface CrewInterface extends Remote {
     public ArrayList<HostInterface> getHosts() throws RemoteException;
 
     public ArrayList<String> getAirplaneLevels() throws RemoteException;
+
+    public void updateCrew(boolean isAvailable) throws RemoteException;
+
+    public PilotInterface getPilot() throws RemoteException;
+
+    public boolean isIsAvailable() throws RemoteException;
+
+    public void setIsAvailable(boolean isAvailable) throws RemoteException;
 }

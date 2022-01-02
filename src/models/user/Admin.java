@@ -25,7 +25,7 @@ public class Admin extends User implements AdminInterface, Serializable {
     public Admin() throws RemoteException {
     }
 
-    public void insertAdmin() {
+    public void insertAdmin() throws RemoteException {
         this.mapper.insert(this);
     }
 

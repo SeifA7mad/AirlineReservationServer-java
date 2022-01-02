@@ -31,7 +31,7 @@ public class Pilot extends User implements PilotInterface, Serializable {
         super();
     }
 
-    public void insertPilot() {
+    public void insertPilot() throws RemoteException {
         this.mapper.insert(this);
     }
 

@@ -16,7 +16,7 @@ import rmi.AirportInterface;
 public class AirportDataMapper {
     private MongoCollection airportCollection = DatabaseConnection.getCollection("airports");
 
-    public Document createAirportDocument(Airport airport) {
+    public Document createAirportDocument(AirportInterface airport) throws RemoteException {
         Document airportDoc = new Document().append("name", airport.getName()).append("country", airport.getCountry())
                 .append("terminalNumbers", airport.getTerminalNumber()).append("hallNumbers", airport.getHallNumber());
         if (airport.getAirportId() != null) {
@@ -25,7 +25,7 @@ public class AirportDataMapper {
         return airportDoc;
     }
 
-    public void insert(Airport airport) {
+    public void insert(AirportInterface airport) throws RemoteException {
         Document airportDoc = createAirportDocument(airport);
         airportCollection.insertOne(airportDoc);
     }

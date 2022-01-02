@@ -32,7 +32,12 @@ public class Crew extends UnicastRemoteObject implements CrewInterface, Serializ
         this.airplaneLevels = airplaneLevels;
         this.isAvailable = true;
 
-        mapper.insert(this);
+        try {
+            mapper.insert(this);
+        } catch (RemoteException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     public Crew(ObjectId crewId, 

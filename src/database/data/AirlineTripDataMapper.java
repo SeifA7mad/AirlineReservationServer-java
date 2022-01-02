@@ -42,13 +42,13 @@ public class AirlineTripDataMapper {
         return airlineTripDetailsDoc;
     }
 
-    public Document createAirlineTripDocument(AirlineTrip airlineTrip) {
+    public Document createAirlineTripDocument(AirlineTrip airlineTrip) throws RemoteException {
 
-        Document airplaneDoc = airplaneDataMapper.createAirplaneDocument((Airplane) airlineTrip.getAirplane());
-        Document originAirportDoc = airportDataMapper.createAirportDocument((Airport) airlineTrip.getOrigin());
-        Document destinationAirportDoc = airportDataMapper.createAirportDocument((Airport) airlineTrip.getDestination());
+        Document airplaneDoc = airplaneDataMapper.createAirplaneDocument(airlineTrip.getAirplane());
+        Document originAirportDoc = airportDataMapper.createAirportDocument(airlineTrip.getOrigin());
+        Document destinationAirportDoc = airportDataMapper.createAirportDocument(airlineTrip.getDestination());
         Document airlineTripDetailsDoc = createAirlineTripDetailsDocument(airlineTrip.getAirlineTripDetails().get(0));
-        Document crewDoc = crewDataMapper.createCrewDocument((Crew) airlineTrip.getCrew());
+        Document crewDoc = crewDataMapper.createCrewDocument(airlineTrip.getCrew());
         ArrayList<ObjectId> tickets = new ArrayList<ObjectId>();
 
         ArrayList<Document> airlineDetails = new ArrayList<Document>();
@@ -70,7 +70,7 @@ public class AirlineTripDataMapper {
         return airlineDoc;
     }
 
-    public void insert(AirlineTrip airlineTrip) {
+    public void insert(AirlineTrip airlineTrip) throws RemoteException {
         Document airlineDoc = createAirlineTripDocument(airlineTrip);
         airlineTripCollection.insertOne(airlineDoc);
     }

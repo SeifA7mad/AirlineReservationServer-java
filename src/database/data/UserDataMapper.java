@@ -15,40 +15,47 @@ import models.ticket.Ticket;
 import models.user.*;
 import rmi.PassengerInterface;
 import rmi.PilotInterface;
+import rmi.UserInterface;
 
 public class UserDataMapper {
     private MongoCollection userCollection = DatabaseConnection.getCollection("users");
 
-    public Document createUserDocument(User user) {
-        Document userAccountDoc = new Document().append("username", user.getAcc().getUsername())
-                .append("email", user.getAcc().getEmail()).append("password", user.getAcc().getPassword())
-                .append("accType", user.getAcc().getAccountType());
-
+    public Document createUserDocument(UserInterface user) throws RemoteException {
+        System.out.println("x");
+        Document userAccountDoc = new Document().append("username", user.getUsername())
+                .append("email", user.getEmail()).append("password", user.getPassword())
+                .append("accType", user.getAccountType());
+                System.out.println("xx");
         Document userDoc = new Document().append("passportID", user.getPassportID()).append("Fname", user.getFname())
                 .append("Lname", user.getLname()).append("DOB",
                         user.getDOB().toString())
                 .append("phoneNo", user.getPhoneNo()).append("gender", user.getGender()).append("account",
                         userAccountDoc)
                 .append("tickets", new ArrayList<Document>());
-
+        System.out.println("xxx");
         if (user.getUserId() != null) {
             userDoc.append("_id", user.getUserId());
         }
 
-        if (user.getAcc().getAccountType() == "pilot") {
-            userDoc.append("expirence", ((Pilot) user).getExpirence());
-        } else if (user.getAcc().getAccountType() == "passenger") {
+        if (user.getAccountType() == "pilot") {
+            userDoc.append("expirence", ((PilotInterface)user).getExpirence());
+        } else if (user.getAccountType() == "passenger") {
             ArrayList<ObjectId> companionsDoc = new ArrayList<ObjectId>();
 
-            ((Passenger) user).getCompanions().forEach((companion) -> {
-                companionsDoc.add(((Passenger) companion).getUserId());
+            ((PassengerInterface)user).getCompanions().forEach((companion) -> {
+                try {
+                    companionsDoc.add(((PassengerInterface) companion).getUserId());
+                } catch (RemoteException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
             });
             userDoc.append("companions", companionsDoc);
         }
         return userDoc;
     }
 
-    public void insert(User user) {
+    public void insert(User user) throws RemoteException {
         Document userDoc = createUserDocument(user);
 
         userCollection.insertOne(userDoc);

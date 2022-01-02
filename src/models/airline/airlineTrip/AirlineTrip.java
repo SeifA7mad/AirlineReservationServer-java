@@ -65,7 +65,11 @@ public class AirlineTrip extends UnicastRemoteObject implements AirlineTripSubje
             String depatureDateTime, String arrivalDateTime, int destinationTerminalNo, int orginHallNo,
             double airlineCost, CrewInterface crew) {
         this.airplane = airplane;
-        this.maxNumberOfTickets = ((Airplane)airplane).getSeats().size();
+        try {
+            this.maxNumberOfTickets = this.airplane.getSeats().size();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
         this.origin = origin;
         this.destination = destination;
         this.airlineTripDetails = new ArrayList<AirlineTripDetatils>();
@@ -75,10 +79,21 @@ public class AirlineTrip extends UnicastRemoteObject implements AirlineTripSubje
         this.tickets = new ArrayList<Ticket>();
         this.airlineTripState = new UnpublishedState();
 
-        ((Crew)this.crew).updateCrew(false);
-        ((Airplane)this.airplane).updateAirplane(true);
+        try {
+            this.crew.updateCrew(false);
+            this.airplane.updateAirplane(true);
+        } catch (RemoteException e) {
 
-        mapper.insert(this);
+            e.printStackTrace();
+        }
+
+
+        try {
+            mapper.insert(this);
+        } catch (RemoteException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     public ArrayList<AirlineTripInterface> getAirlineTripsBy(String from, String to) {

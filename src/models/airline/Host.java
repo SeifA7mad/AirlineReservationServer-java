@@ -29,14 +29,14 @@ public class Host extends UnicastRemoteObject implements HostInterface, Serializ
     }
 
     @Override
-    public void addHost(String passportNo, String name, ArrayList<String> languages) {
+    public void addHost(String passportNo, String name, ArrayList<String> languages) throws RemoteException {
         this.passportNumber = passportNo;
         this.name = name;
         this.languages = languages;
         insertHost();
     }
 
-    public void insertHost() {
+    public void insertHost() throws RemoteException {
         mapper.insert(this);
     }
 

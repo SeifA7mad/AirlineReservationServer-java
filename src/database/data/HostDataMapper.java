@@ -18,7 +18,7 @@ import rmi.HostInterface;
 public class HostDataMapper {
     private MongoCollection hostCollection = DatabaseConnection.getCollection("hosts");
 
-    public Document createHostDocument(Host host) {
+    public Document createHostDocument(HostInterface host) throws RemoteException {
         Document hostDoc = new Document().append("passportNumber", host.getPassportNumber())
                 .append("name", host.getName()).append("languages", host.getLanguages());
 
@@ -28,7 +28,7 @@ public class HostDataMapper {
         return hostDoc;
     }
 
-    public void insert(Host host) {
+    public void insert(Host host) throws RemoteException {
         Document hostDoc = createHostDocument(host);
         hostCollection.insertOne(hostDoc);
     }

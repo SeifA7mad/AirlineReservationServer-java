@@ -29,6 +29,7 @@ import models.user.Passenger;
 import models.user.Pilot;
 import models.user.User;
 import rmi.AdminInterface;
+import rmi.AirlineTripInterface;
 import rmi.AirplaneInterface;
 import rmi.AirportInterface;
 import rmi.CrewInterface;
@@ -53,6 +54,7 @@ public class AirlineReservationServer {
             PassengerInterface passengerInterface = new Passenger();
             AdminInterface adminInterface = new Admin();
             CrewInterface crewInterface = new Crew();
+            AirlineTripInterface airlineTripInterface = new AirlineTrip();
 
             // My RMI Registry
             Registry registry = LocateRegistry.createRegistry(1099);
@@ -65,6 +67,7 @@ public class AirlineReservationServer {
             registry.bind("passenger", passengerInterface);
             registry.bind("admin", adminInterface);
             registry.bind("crew", crewInterface);
+            registry.bind("airlineTrip", airlineTripInterface);
             System.out.println("My SERVER is ready...");
         } catch (Exception ex) {
             System.out.println(ex);
