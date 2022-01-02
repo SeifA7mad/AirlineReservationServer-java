@@ -88,6 +88,7 @@ public class Ticket implements TicketPrototype {
         }
     }
 
+
     @Override
     public TicketPrototype clone(ArrayList<AirlineTrip> airlineTrips) {
         HashMap<ObjectId, Seat> airlineSeats = new HashMap<ObjectId, Seat>();

@@ -34,9 +34,12 @@ public class PassengerDataMapper {
             // ObjectId hostId = hostDoc.getObjectId("_id");
             // String passportNo = hostDoc.getString("passportNumber");
             // String name = hostDoc.getString("name");
-            // ArrayList<String> languages = hostDoc.get("languages", new ArrayList<String>().getClass());
+            // ArrayList<String> languages = hostDoc.get("languages", new
+            // ArrayList<String>().getClass());
 
-            // Ticket ticket = new Ticket(ticketId, price, requestExtraWeight, requestWheelChair, type, ticketstate, airlineTripSeats, payment, passenger, enquiry)
+            // Ticket ticket = new Ticket(ticketId, price, requestExtraWeight,
+            // requestWheelChair, type, ticketstate, airlineTripSeats, payment, passenger,
+            // enquiry)
             // tickets.add(ticket);
         }
 
@@ -53,6 +56,20 @@ public class PassengerDataMapper {
                 Updates.push("companions", companion.getUserId()));
     }
 
+    public boolean removeTicket(int ticketId, Passenger passenger) {
+        try {
+            Document passengerDoc = (Document) userCollection.find(Filters.eq("_id", passenger.getUserId())).first();
+            ArrayList<Document> ticketsDocs = passengerDoc.get("tickets", new ArrayList<Document>().getClass());
+            ticketsDocs.remove(ticketId);
+            userCollection.updateOne(Filters.eq("_id", passenger.getUserId()),
+                    Updates.set("tickets", ticketsDocs));
+            return true;
+        } catch (UnsupportedOperationException e) {
+            System.out.println(e);
+            return false;
+        }
+    }
+
     public ArrayList<Ticket> fetchTickets(Passenger passenger) {
         Document passengerDoc = (Document) userCollection.find(Filters.eq("_id", passenger.getUserId())).first();
         ArrayList<Document> ticketsDocs = passengerDoc.get("tickets", new ArrayList<Document>().getClass());
@@ -61,7 +78,7 @@ public class PassengerDataMapper {
         ticketsDocs.forEach((ticketDoc) -> {
             tickets.add(ticketDataMapper.createTicketObj(ticketDoc));
         });
-        
+
         return tickets;
     }
 

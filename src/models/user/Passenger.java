@@ -61,6 +61,10 @@ public class Passenger extends User implements AirlineTripObserver {
         });
     }
 
+    public boolean cancelTicket(int ticketId) {
+        return this.passengerMapper.removeTicket(ticketId - 1, this);
+    }
+
     public ArrayList<Ticket> getPassengerTickets() {
         ArrayList<Ticket> tickets = passengerMapper.fetchTickets(this);
         return tickets;

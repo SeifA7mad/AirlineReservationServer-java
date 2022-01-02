@@ -113,9 +113,12 @@ public class AirlineReservationServer {
         // Passenger pa1 = new Passenger("A43454343", "Shiko", "Ahmad", "2000-11-10", "010220910", 'M', "shiko", "shiko@test.com", "123");
         // pa1.insertPassenger();
 
-        // LOGIN TEST
-        // User p = new Passenger();
-        // Passenger pa = (Passenger) p.login("karim@test.com", "123");
+        //LOGIN TEST
+        User p = new Passenger();
+        Passenger pa = (Passenger) p.login("karim@test.com", "123");
+
+        //CANCEL TICKET TEST
+        // pa.cancelTicket(1);
 
         // //ADD COMAPNIONS TEST
         // // ArrayList<String> companionsEmails = new ArrayList<String>();
@@ -128,6 +131,11 @@ public class AirlineReservationServer {
         // airlines.add(a.getAirlineTripsBy("Cairo", "London").get(0));
         // Ticket t = new Ticket();
         // t.bookTicket(airlines, pa, 0, false, "Economy", new Payment("83938290832", "Karim", "2000-11-10"));
+
+        // AirlineTrip a = new AirlineTrip();
+        // a = a.getAirlineTripBy(new ObjectId("61d0e80a14f4a46a886dc233"));
+
+        // a.cancelAirlineTrip();
     }
 
 }

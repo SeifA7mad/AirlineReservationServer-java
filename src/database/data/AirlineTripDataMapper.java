@@ -110,7 +110,6 @@ public class AirlineTripDataMapper {
         } else {
             airlineTripState = new EndedState();
         }
-
         return new AirlineTrip(airlineTripID, maxNumberOfTickets, airplane, origin, destination, airlineTripDetails,
                 airlineCost, tickets, crew, airlineTripState);
     }
@@ -147,6 +146,7 @@ public class AirlineTripDataMapper {
         Document airlineTripDoc = (Document) airlineTripCollection.find(Filters.eq("_id", airlineTripId)).first();
 
         if (airlineTripDoc == null) {
+            System.out.println("NO AIRLINE FOUNDED");
             return null;
         }
         return createAirlineTripObj(airlineTripDoc);

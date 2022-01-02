@@ -30,7 +30,7 @@ public class AirlineTrip implements AirlineTripSubject {
     private AirlineTripDataMapper mapper = new AirlineTripDataMapper();
 
     private AirlineTripState airlineTripState;
-    private ArrayList<AirlineTripObserver> passengerObservers;
+    private ArrayList<AirlineTripObserver> passengerObservers = new ArrayList<AirlineTripObserver>();
 
     public AirlineTrip() {
         this.airlineTripDetails = new ArrayList<AirlineTripDetatils>();
@@ -120,7 +120,7 @@ public class AirlineTrip implements AirlineTripSubject {
 
     }
 
-    public boolean cancelAirlineTrip(AirlineTrip airlineTrip) {
+    public boolean cancelAirlineTrip() {
         // TODO Auto-generated method stub
         this.airlineTripState.cancelAirlineTrip(this);
         return false;
