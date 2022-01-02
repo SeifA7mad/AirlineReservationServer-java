@@ -168,11 +168,17 @@ public class AirlineReservationServer {
         // pa1.insertPassenger();
 
         // //LOGIN TEST
-        // User p = new Passenger();
-        // Passenger pa = (Passenger) p.login("shiko@test.com", "123");
+        // User p;
+        // try {
+        //     p = new Passenger();
+        //     Passenger pa = (Passenger) p.login("karim@test.com", "123");
+        //     // GET COMPANION TEST
+        //     System.out.println(((Passenger) pa.getPassengerCompanions().get(0)).getFname());
+        // } catch (RemoteException e) {
+        //     // TODO Auto-generated catch block
+        //     e.printStackTrace();
+        // }
 
-        // // GET COMPANION TEST
-        // System.out.println(pa.getPassengerCompanions().get(0).getFname());
         // System.out.println(pa.getPassengerTickets().get(0).getPrice());
 
         // // REMOVE COMPANION TEST

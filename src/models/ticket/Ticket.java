@@ -85,7 +85,7 @@ public class Ticket implements TicketPrototype {
             this.passenger.addBookedTicket(this, airlineTrips);
             if (passenger.getCompanions().size() > 0) {
                 passenger.getCompanions().forEach((companion) -> {
-                    companion.addBookedTicket((Ticket) this.clone(airlineTrips), airlineTrips);
+                    ((Passenger) companion).addBookedTicket((Ticket) this.clone(airlineTrips), airlineTrips);
                 });
             }
         }

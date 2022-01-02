@@ -69,8 +69,13 @@ public class UserDataMapper {
         User user = null;
         if (userAccountDoc.getString("accType").equals("pilot")) {
             String expirence = userDoc.getString("expirence");
-            user = new Pilot(userId, passportID, Fname, Lname, DOB, phoneNo, gender,
-                    username, email, password, expirence);
+            try {
+                user = new Pilot(userId, passportID, Fname, Lname, DOB, phoneNo, gender,
+                        username, email, password, expirence);
+            } catch (RemoteException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         } else if (userAccountDoc.getString("accType").equals("passenger")) {
 
             // CHECK IF COMPANION != NULL AND TICKETS != NULL
@@ -90,8 +95,13 @@ public class UserDataMapper {
                 e.printStackTrace();
             }
         } else if (userAccountDoc.getString("accType").equals("admin")) {
-            user = new Admin(userId, passportID, Fname, Lname, DOB, phoneNo, gender,
-                    username, email, password);
+            try {
+                user = new Admin(userId, passportID, Fname, Lname, DOB, phoneNo, gender,
+                        username, email, password);
+            } catch (RemoteException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         }
 
         return user;
