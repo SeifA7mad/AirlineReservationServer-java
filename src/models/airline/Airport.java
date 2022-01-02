@@ -34,7 +34,7 @@ public class Airport extends UnicastRemoteObject implements AirportInterface, Se
 
     @Override
     public void addAirport(String name, String country, ArrayList<Integer> terminalNumber,
-            ArrayList<Integer> hallNumber) throws RemoteException {
+            ArrayList<Integer> hallNumber) {
         this.name = name;
         this.country = country;
         this.terminalNumber = terminalNumber;
@@ -44,7 +44,7 @@ public class Airport extends UnicastRemoteObject implements AirportInterface, Se
     }
 
     @Override
-    public ArrayList<Airport> getAirports() throws RemoteException {
+    public ArrayList<Airport> getAirports() {
         ArrayList<Airport> airports = null;
         airports = mapper.fetchAirports();
         if (airports == null) {

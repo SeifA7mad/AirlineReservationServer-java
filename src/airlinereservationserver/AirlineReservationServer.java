@@ -4,6 +4,7 @@
  */
 package airlinereservationserver;
 
+import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ import models.user.Passenger;
 import models.user.Pilot;
 import models.user.User;
 import rmi.AirportInterface;
+import rmi.HostInterface;
 
 public class AirlineReservationServer {
 
@@ -38,14 +40,16 @@ public class AirlineReservationServer {
         try {
             // My remote object [Skeleton]
             AirportInterface airportInterface = new Airport();
+            HostInterface hostInterface = new Host();
 
             // My RMI Registry
             Registry registry = LocateRegistry.createRegistry(1099);
 
             // Add my object to the RMI Registry
             registry.bind("airport", airportInterface);
+            registry.bind("host", hostInterface);
 
-            System.out.println("My AIRPORT is ready...");
+            System.out.println("My SERVER is ready...");
         } catch (Exception ex) {
             System.out.println("Exception occured");
         }
@@ -72,9 +76,16 @@ public class AirlineReservationServer {
         // l.add("Spain");
         // h.addHost("A12e43456", "Mariam", l);
 
-        // // REMOVE HOST TEST
-        // Host host = new Host();
-        // host.getAllHosts().get(1).removeHost();
+        // REMOVE HOST TEST
+        // Host host;
+        // try {
+        //     host = new Host();
+        //     host.getAllHosts().get(1).removeHost();
+        // } catch (RemoteException e) {
+        //     // TODO Auto-generated catch block
+        //     e.printStackTrace();
+        // }
+
 
         // ADD PILOT TEST
         // Pilot p = new Pilot("B372037", "Mayar", "Hani", "10/11/2000", "0212020102",
@@ -114,9 +125,27 @@ public class AirlineReservationServer {
         // // GET ALL AIRPLANES TEST
         // Airplane airplane = new Airplane();
         // ArrayList<Airplane> airplanes = airplane.getAirplanes();
-        // // GET ALL AIRPORTS TEST
-        // Airport airport = new Airport();
-        // ArrayList<Airport> airports = airport.getAirports();
+        // GET ALL AIRPORTS TEST
+        // Airport airport;
+        // try {
+        //     airport = new Airport();
+        //     ArrayList<AirportInterface> airports = airport.getAirports();
+        //     System.out.println(((Airport)airports.get(0)).getName());
+        // } catch (RemoteException e) {
+        //     // TODO Auto-generated catch block
+        //     e.printStackTrace();
+        // }
+
+        // Airport airport;
+        // try {
+        //     airport = new Airport();
+        //     ArrayList<Airport> airports = airport.getAirports();
+        //     System.out.println(airports.get(0).getName());
+
+        // } catch (RemoteException e) {
+        //     // TODO Auto-generated catch block
+        //     e.printStackTrace();
+        // }
 
 
         // // GET ALL Hosts TEST

@@ -1,5 +1,6 @@
 package database.data;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -25,6 +26,7 @@ public class HostDataMapper {
         }
         return hostDoc;
     }
+
     public void insert(Host host) {
         Document hostDoc = createHostDocument(host);
         hostCollection.insertOne(hostDoc);
@@ -41,8 +43,15 @@ public class HostDataMapper {
             String name = hostDoc.getString("name");
             ArrayList<String> languages = hostDoc.get("languages", new ArrayList<String>().getClass());
 
-            Host host = new Host(hostId, passportNo, name, languages);
-            hosts.add(host);
+            Host host;
+            try {
+                host = new Host(hostId, passportNo, name, languages);
+                hosts.add(host);
+            } catch (RemoteException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
         }
 
         return hosts;
@@ -59,8 +68,15 @@ public class HostDataMapper {
             String name = hostDoc.getString("name");
             ArrayList<String> languages = hostDoc.get("languages", new ArrayList<String>().getClass());
 
-            Host host = new Host(hostId, passportNo, name, languages);
-            hosts.add(host);
+            Host host;
+            try {
+                host = new Host(hostId, passportNo, name, languages);
+                hosts.add(host);
+            } catch (RemoteException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
         }
 
         return hosts;

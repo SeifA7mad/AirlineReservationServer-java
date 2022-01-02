@@ -1,12 +1,16 @@
 package models.airline;
 
+import java.io.Serializable;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 
 import org.bson.types.ObjectId;
 
 import database.data.HostDataMapper;
+import rmi.HostInterface;
 
-public class Host {
+public class Host extends UnicastRemoteObject implements HostInterface, Serializable {
     private ObjectId hostId;
     private String passportNumber;
     private String name;
@@ -14,16 +18,17 @@ public class Host {
 
     private HostDataMapper mapper = new HostDataMapper();
 
-    public Host(ObjectId hostId, String passportNo, String name, ArrayList<String> languages) {
+    public Host(ObjectId hostId, String passportNo, String name, ArrayList<String> languages) throws RemoteException {
         this.hostId = hostId;
         this.passportNumber = passportNo;
         this.name = name;
         this.languages = languages;
     }
 
-    public Host() {
+    public Host() throws RemoteException {
     }
 
+    @Override
     public void addHost(String passportNo, String name, ArrayList<String> languages) {
         this.passportNumber = passportNo;
         this.name = name;
