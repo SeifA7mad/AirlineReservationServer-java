@@ -35,8 +35,8 @@ public class Host {
         mapper.insert(this);
     }
 
-    public boolean removeHost(Host H) {
-        return true;
+    public boolean removeHost() {
+        return this.mapper.removeHost(this);
     }
 
     public ArrayList<Host> getAllHosts() {

@@ -5,6 +5,7 @@ import java.util.Iterator;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
+import com.mongodb.client.model.Filters;
 
 import org.bson.Document;
 import org.bson.types.ObjectId;
@@ -76,6 +77,16 @@ public class HostDataMapper {
         ArrayList<Host> hosts = getHostsArrayList(cursor);
 
         return hosts;
+    }
+
+    public boolean removeHost(Host host) {
+        Document hostDoc = (Document) hostCollection.findOneAndDelete(Filters.eq("_id", host.getHostId()));
+
+        if (hostDoc == null) {
+            return false;
+        }
+
+        return true;
     }
 
 }

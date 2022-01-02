@@ -1,12 +1,13 @@
 package models.ticket.ticketState;
 
 import models.ticket.Ticket;
+import models.user.Passenger;
 
 public class EndBookingState extends TicketState {
 
     @Override
-    public boolean cancelTicket(Ticket ticket) {
-        // TODO Auto-generated method stub
+    public boolean cancelTicket(int ticketId, Passenger passenger) {
+        System.out.println("CANNOT CANCEL AN EXPIRED TICKET");
         return false;
     }
 

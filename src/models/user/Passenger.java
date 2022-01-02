@@ -53,6 +53,14 @@ public class Passenger extends User implements AirlineTripObserver {
         });
     }
 
+    public boolean cancelTicket(int ticketId, Ticket ticket) {
+        boolean isRemoved = ticket.cancelTicket(ticketId - 1, this);
+        if (isRemoved) {
+            this.tickets.remove(ticketId - 1);
+        }
+        return isRemoved;
+    }
+
     public void addCompanions(ArrayList<String> companionsEmails) {
         companionsEmails.forEach((email) -> {
             Passenger companion = (Passenger) mapper.findPassengerBy(email);
@@ -61,13 +69,32 @@ public class Passenger extends User implements AirlineTripObserver {
         });
     }
 
-    public boolean cancelTicket(int ticketId) {
-        return this.passengerMapper.removeTicket(ticketId - 1, this);
+    public boolean removeCompanion(ObjectId companionId) {
+        boolean isRemoved = this.passengerMapper.removeCompanion(companionId, this);
+
+        if (isRemoved) {
+            for (int i = 0; i < this.companions.size(); i++) {
+                if (this.companions.get(i).getUserId().equals(companionId)) {
+                    this.companions.remove(i);
+                    break;
+                }
+            }
+        }
+
+        return isRemoved;
     }
 
     public ArrayList<Ticket> getPassengerTickets() {
         ArrayList<Ticket> tickets = passengerMapper.fetchTickets(this);
         return tickets;
+    }
+
+    public ArrayList<Passenger> getPassengerCompanions() {
+        return this.companions;
+    }
+
+    public ArrayList<Ticket> getTickets() {
+        return this.tickets;
     }
 
     @Override

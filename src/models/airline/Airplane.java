@@ -80,6 +80,10 @@ public class Airplane {
         mapper.updateAirplane(this.airplaneID, this.onDuty);
     }
 
+    public boolean removeHost() {
+        return this.mapper.removeAirplane(this);
+    }
+
     // public Airplane getAirplanes(ObjectId airplaneId) {
     //     Airplane airplane = null;
     //     airplane = mapper.fetchAirplanes(airplaneId);

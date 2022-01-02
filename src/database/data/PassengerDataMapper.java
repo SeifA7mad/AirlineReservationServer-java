@@ -82,4 +82,25 @@ public class PassengerDataMapper {
         return tickets;
     }
 
+    // public ArrayList<ObjectId> fetchCompanion(Passenger passenger) {
+    //     Document passengerDoc = (Document) userCollection.find(Filters.eq("_id", passenger.getUserId())).first();
+    //     ArrayList<ObjectId> companions = passengerDoc.get("companions", new ArrayList<ObjectId>().getClass());
+    //     return companions;
+    // }
+
+    public boolean removeCompanion(ObjectId companionId, Passenger passenger) {
+        Document passengerDoc = (Document) userCollection.find(Filters.eq("_id", passenger.getUserId())).first();
+        ArrayList<ObjectId> companions = passengerDoc.get("companions", new ArrayList<ObjectId>().getClass());
+
+        for(int i = 0; i < companions.size(); i++) {
+            if (companions.get(i).equals(companionId)) {
+                companions.remove(i);
+                  userCollection.updateOne(Filters.eq("_id", passenger.getUserId()),
+                    Updates.set("companions", companions));
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

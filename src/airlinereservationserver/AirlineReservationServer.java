@@ -47,12 +47,16 @@ public class AirlineReservationServer {
         // Airplane a = new Airplane();
         // a.addAirplane("Jumbo", "Big", "Intermediate", 40, 15, 40, 2000.0);
 
-        // ADD HOST TEST
+        // // ADD HOST TEST
         // Host h = new Host();
         // ArrayList<String> l = new ArrayList<String>();
         // l.add("Arabic");
-        // l.add("English");
-        // h.addHost("A123456", "Mayar", l);
+        // l.add("Spain");
+        // h.addHost("A12e43456", "Mariam", l);
+
+        // // REMOVE HOST TEST
+        // Host host = new Host();
+        // host.getAllHosts().get(1).removeHost();
 
         // ADD PILOT TEST
         // Pilot p = new Pilot("B372037", "Mayar", "Hani", "10/11/2000", "0212020102",
@@ -113,17 +117,24 @@ public class AirlineReservationServer {
         // Passenger pa1 = new Passenger("A43454343", "Shiko", "Ahmad", "2000-11-10", "010220910", 'M', "shiko", "shiko@test.com", "123");
         // pa1.insertPassenger();
 
-        //LOGIN TEST
-        User p = new Passenger();
-        Passenger pa = (Passenger) p.login("karim@test.com", "123");
+        // //LOGIN TEST
+        // User p = new Passenger();
+        // Passenger pa = (Passenger) p.login("shiko@test.com", "123");
+
+        // // GET COMPANION TEST
+        // System.out.println(pa.getPassengerCompanions().get(0).getFname());
+        // System.out.println(pa.getPassengerTickets().get(0).getPrice());
+
+        // // REMOVE COMPANION TEST
+        // pa.removeCompanion(new ObjectId("61d0912414f4a458ecf7a79a"));
 
         //CANCEL TICKET TEST
         // pa.cancelTicket(1);
 
-        // //ADD COMAPNIONS TEST
-        // // ArrayList<String> companionsEmails = new ArrayList<String>();
-        // // companionsEmails.add("shiko@test.com");
-        // // pa.addCompanions(companionsEmails);
+        //ADD COMAPNIONS TEST
+        // ArrayList<String> companionsEmails = new ArrayList<String>();
+        // companionsEmails.add("shiko@test.com");
+        // pa.addCompanions(companionsEmails);
 
         // //BOOK TICKET TEST
         // AirlineTrip a = new AirlineTrip();

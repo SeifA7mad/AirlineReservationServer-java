@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import org.bson.types.ObjectId;
 
+import database.data.PassengerDataMapper;
 import database.data.TicketDataMapper;
 import models.airline.Seat;
 import models.airline.airlineTrip.AirlineTrip;
@@ -22,6 +23,8 @@ public class Ticket implements TicketPrototype {
     private Payment payment;
     private Passenger passenger;
     private Enquiry enquiry;
+
+    private PassengerDataMapper passengerMapper = new PassengerDataMapper();
 
     public Ticket() {
 
@@ -103,6 +106,10 @@ public class Ticket implements TicketPrototype {
         });
 
         return new Ticket(price, requestExtraWeight, requestWheelChair, type, ticketstate, airlineSeats, payment);
+    }
+
+    public boolean cancelTicket(int ticketId, Passenger passenger) {
+        return this.ticketstate.cancelTicket(ticketId, passenger);
     }
 
     public ObjectId getTicketId() {

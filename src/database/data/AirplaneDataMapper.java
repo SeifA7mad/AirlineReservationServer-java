@@ -106,4 +106,14 @@ public class AirplaneDataMapper {
         airplaneCollection.updateOne(Filters.eq("_id", airplaneId), Updates.set("onDuty", onDuty));
     }
 
+    public boolean removeAirplane(Airplane airplane) {
+        Document airplaneDoc = (Document) airplaneCollection.findOneAndDelete(Filters.eq("_id", airplane.getAirplaneID()));
+
+        if (airplaneDoc == null) {
+            return false;
+        }
+
+        return true;
+    }
+
 }
