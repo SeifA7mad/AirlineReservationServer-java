@@ -1,5 +1,6 @@
 package database.data;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 import com.mongodb.client.MongoCollection;
@@ -11,6 +12,7 @@ import org.bson.types.ObjectId;
 import database.DatabaseConnection;
 import models.ticket.Ticket;
 import models.user.*;
+import rmi.PassengerInterface;
 
 public class UserDataMapper {
     private MongoCollection userCollection = DatabaseConnection.getCollection("users");
@@ -37,7 +39,7 @@ public class UserDataMapper {
             ArrayList<ObjectId> companionsDoc = new ArrayList<ObjectId>();
 
             ((Passenger) user).getCompanions().forEach((companion) -> {
-                companionsDoc.add(companion.getUserId());
+                companionsDoc.add(((Passenger) companion).getUserId());
             });
             userDoc.append("companions", companionsDoc);
         }
@@ -73,15 +75,20 @@ public class UserDataMapper {
 
             // CHECK IF COMPANION != NULL AND TICKETS != NULL
             ArrayList<ObjectId> companionsDoc = userDoc.get("companions", new ArrayList<ObjectId>().getClass());
-            ArrayList<Passenger> companions = new ArrayList<Passenger>();
+            ArrayList<PassengerInterface> companions = new ArrayList<PassengerInterface>();
             ArrayList<Ticket> tickets = new ArrayList<Ticket>();
 
             companionsDoc.forEach((id) -> {
                 companions.add((Passenger) findPassengerBy(id));
             });
 
-            user = new Passenger(userId, passportID, Fname, Lname, DOB, phoneNo, gender,
-                    username, email, password, companions, tickets);
+            try {
+                user = new Passenger(userId, passportID, Fname, Lname, DOB, phoneNo, gender,
+                        username, email, password, companions, tickets);
+            } catch (RemoteException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         } else if (userAccountDoc.getString("accType").equals("admin")) {
             user = new Admin(userId, passportID, Fname, Lname, DOB, phoneNo, gender,
                     username, email, password);

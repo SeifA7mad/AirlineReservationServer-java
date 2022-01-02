@@ -6,7 +6,6 @@ import java.util.ArrayList;
 
 import org.bson.types.ObjectId;
 
-import models.airline.Host;
 
 public interface HostInterface extends Remote {
     public void addHost(String passportNo, String name, ArrayList<String> languages) throws RemoteException;

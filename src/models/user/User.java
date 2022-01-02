@@ -1,5 +1,7 @@
 package models.user;
 
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -7,7 +9,7 @@ import database.data.UserDataMapper;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
-public abstract class User {
+public abstract class User extends UnicastRemoteObject {
     private ObjectId userId;
     private String passportID;
     private String Fname;
@@ -19,13 +21,13 @@ public abstract class User {
 
     protected UserDataMapper mapper = new UserDataMapper();
 
-    public User() {
+    public User() throws RemoteException {
 
     }
 
     public User(
             String passportID, String Fname, String Lname, String DOB, String phoneNo, char gender,
-            String username, String email, String password, String accType) {
+            String username, String email, String password, String accType) throws RemoteException {
         this.passportID = passportID;
         this.Fname = Fname;
         this.Lname = Lname;
@@ -37,8 +39,19 @@ public abstract class User {
 
     public User(ObjectId userId,
             String passportID, String Fname, String Lname, String DOB, String phoneNo, char gender,
-            String username, String email, String password, String accType) {
+            String username, String email, String password, String accType) throws RemoteException {
         this.userId = userId;
+        this.passportID = passportID;
+        this.Fname = Fname;
+        this.Lname = Lname;
+        this.DOB = LocalDate.parse(DOB);
+        this.phoneNo = phoneNo;
+        this.gender = gender;
+        this.acc = new Account().createAccount(username, email, password, accType, this);
+    }
+
+    public void createAccount(String passportID, String Fname, String Lname, String DOB, String phoneNo, char gender,
+            String username, String email, String password, String accType) {
         this.passportID = passportID;
         this.Fname = Fname;
         this.Lname = Lname;
