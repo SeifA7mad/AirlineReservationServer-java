@@ -24,13 +24,18 @@ import models.airline.airlineTrip.AirlineTrip;
 import models.airline.airlineTrip.AirlineTripDetatils;
 import models.ticket.Payment;
 import models.ticket.Ticket;
+import models.user.Admin;
 import models.user.Passenger;
 import models.user.Pilot;
 import models.user.User;
+import rmi.AdminInterface;
 import rmi.AirplaneInterface;
 import rmi.AirportInterface;
 import rmi.CrewInterface;
 import rmi.HostInterface;
+import rmi.PassengerInterface;
+import rmi.PilotInterface;
+import rmi.UserInterface;
 
 public class AirlineReservationServer {
 
@@ -44,6 +49,10 @@ public class AirlineReservationServer {
             AirportInterface airportInterface = new Airport();
             HostInterface hostInterface = new Host();
             AirplaneInterface airplaneInterface = new Airplane();
+            PilotInterface pilotInterface = new Pilot();
+            PassengerInterface passengerInterface = new Passenger();
+            AdminInterface adminInterface = new Admin();
+            CrewInterface crewInterface = new Crew();
 
             // My RMI Registry
             Registry registry = LocateRegistry.createRegistry(1099);
@@ -52,10 +61,13 @@ public class AirlineReservationServer {
             registry.bind("airport", airportInterface);
             registry.bind("host", hostInterface);
             registry.bind("airplane", airplaneInterface);
-
+            registry.bind("pilot", pilotInterface);
+            registry.bind("passenger", passengerInterface);
+            registry.bind("admin", adminInterface);
+            registry.bind("crew", crewInterface);
             System.out.println("My SERVER is ready...");
         } catch (Exception ex) {
-            System.out.println("Exception occured");
+            System.out.println(ex);
         }
 
         // ADD AIRPORT TEST
@@ -164,7 +176,6 @@ public class AirlineReservationServer {
         //     System.out.println(((Crew)crews.get(0)).getCrewId());
         // } catch (RemoteException e) {
         //     // TODO Auto-generated catch block
-
         //     e.printStackTrace();
         // }
 

@@ -4,6 +4,7 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Filters;
 
 import org.bson.Document;
@@ -13,6 +14,7 @@ import database.DatabaseConnection;
 import models.ticket.Ticket;
 import models.user.*;
 import rmi.PassengerInterface;
+import rmi.PilotInterface;
 
 public class UserDataMapper {
     private MongoCollection userCollection = DatabaseConnection.getCollection("users");
@@ -130,5 +132,28 @@ public class UserDataMapper {
             return null;
         }
         return createUserObj(userDoc);
+    }
+
+    public ArrayList<PilotInterface> getPilotsArrayList(MongoCursor<Document> cursor) {
+        ArrayList<PilotInterface> pilots = new ArrayList<PilotInterface>();
+
+        while (cursor.hasNext()) {
+            Document pilotDoc = cursor.next();
+
+            pilots.add((Pilot) createUserObj(pilotDoc));
+        }
+
+        return pilots;
+    }
+
+    public ArrayList<PilotInterface> fetchPilots() {
+        MongoCursor<Document> cursor = userCollection.find(Filters.eq("account.accType", "pilot")).iterator();
+
+        if (cursor == null) {
+            return null;
+        }
+        ArrayList<PilotInterface> pilots = getPilotsArrayList(cursor);
+
+        return pilots;
     }
 }

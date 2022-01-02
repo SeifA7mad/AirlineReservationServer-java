@@ -6,10 +6,12 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import database.data.UserDataMapper;
+import rmi.UserInterface;
+
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
-public abstract class User extends UnicastRemoteObject {
+public abstract class User extends UnicastRemoteObject implements UserInterface {
     private ObjectId userId;
     private String passportID;
     private String Fname;
@@ -59,9 +61,11 @@ public abstract class User extends UnicastRemoteObject {
         this.phoneNo = phoneNo;
         this.gender = gender;
         this.acc = new Account().createAccount(username, email, password, accType, this);
+
+        mapper.insert(this);
     }
 
-    public User login(String email, String password) {
+    public UserInterface login(String email, String password) {
         User user = this.mapper.findUser(email, password);
         if (user == null) {
             System.out.println("wrong email or password");
