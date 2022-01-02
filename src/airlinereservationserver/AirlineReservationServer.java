@@ -142,7 +142,7 @@ public class AirlineReservationServer {
         // Airport airport;
         // try {
         //     airport = new Airport();
-        //     ArrayList<Airport> airports = airport.getAirports();
+        //     ArrayList<AirportInterface> airports = airport.getAirports();
         //     System.out.println(airports.get(0).getName());
 
         // } catch (RemoteException e) {

@@ -11,6 +11,7 @@ import org.bson.types.ObjectId;
 
 import database.DatabaseConnection;
 import models.airline.Airport;
+import rmi.AirportInterface;
 
 public class AirportDataMapper {
     private MongoCollection airportCollection = DatabaseConnection.getCollection("airports");
@@ -39,8 +40,8 @@ public class AirportDataMapper {
         return new Airport(airportID, name, country, terminalNumber, hallNumber);
     }
 
-    private ArrayList<Airport> getAirportsArrayList(MongoCursor<Document> cursor) {
-        ArrayList<Airport> airports = new ArrayList<Airport>();
+    private ArrayList<AirportInterface> getAirportsArrayList(MongoCursor<Document> cursor) {
+        ArrayList<AirportInterface> airports = new ArrayList<AirportInterface>();
 
         while (cursor.hasNext()) {
             Document airportDoc = cursor.next();
@@ -55,7 +56,7 @@ public class AirportDataMapper {
         return airports;
     }
 
-    public ArrayList<Airport> fetchAirports() {
+    public ArrayList<AirportInterface> fetchAirports() {
 
         MongoCursor<Document> cursor = airportCollection.find().iterator();
 
@@ -63,7 +64,7 @@ public class AirportDataMapper {
             return null;
         }
 
-        ArrayList<Airport> airports = getAirportsArrayList(cursor);
+        ArrayList<AirportInterface> airports = getAirportsArrayList(cursor);
 
         return airports;
     }

@@ -44,8 +44,8 @@ public class Host extends UnicastRemoteObject implements HostInterface, Serializ
         return this.mapper.removeHost(this);
     }
 
-    public ArrayList<Host> getAllHosts() {
-        ArrayList<Host> hosts = null;
+    public ArrayList<HostInterface> getAllHosts() {
+        ArrayList<HostInterface> hosts = null;
         hosts = mapper.fetchHosts();
         if (hosts == null) {
             return null;

@@ -13,6 +13,7 @@ import org.bson.types.ObjectId;
 
 import database.DatabaseConnection;
 import models.airline.Host;
+import rmi.HostInterface;
 
 public class HostDataMapper {
     private MongoCollection hostCollection = DatabaseConnection.getCollection("hosts");
@@ -32,8 +33,8 @@ public class HostDataMapper {
         hostCollection.insertOne(hostDoc);
     }
 
-    private ArrayList<Host> getHostsArrayList(MongoCursor<Document> cursor) {
-        ArrayList<Host> hosts = new ArrayList<Host>();
+    private ArrayList<HostInterface> getHostsArrayList(MongoCursor<Document> cursor) {
+        ArrayList<HostInterface> hosts = new ArrayList<HostInterface>();
 
         while (cursor.hasNext()) {
             Document hostDoc = cursor.next();
@@ -82,7 +83,7 @@ public class HostDataMapper {
         return hosts;
     }
 
-    public ArrayList<Host> fetchHosts() {
+    public ArrayList<HostInterface> fetchHosts() {
 
         MongoCursor<Document> cursor = hostCollection.find().iterator();
 
@@ -90,7 +91,7 @@ public class HostDataMapper {
             return null;
         }
 
-        ArrayList<Host> hosts = getHostsArrayList(cursor);
+        ArrayList<HostInterface> hosts = getHostsArrayList(cursor);
 
         return hosts;
     }
