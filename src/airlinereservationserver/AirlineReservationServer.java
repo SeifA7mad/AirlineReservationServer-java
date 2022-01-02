@@ -27,6 +27,7 @@ import models.ticket.Ticket;
 import models.user.Passenger;
 import models.user.Pilot;
 import models.user.User;
+import rmi.AirplaneInterface;
 import rmi.AirportInterface;
 import rmi.HostInterface;
 
@@ -41,6 +42,7 @@ public class AirlineReservationServer {
             // My remote object [Skeleton]
             AirportInterface airportInterface = new Airport();
             HostInterface hostInterface = new Host();
+            AirplaneInterface airplaneInterface = new Airplane();
 
             // My RMI Registry
             Registry registry = LocateRegistry.createRegistry(1099);
@@ -48,6 +50,7 @@ public class AirlineReservationServer {
             // Add my object to the RMI Registry
             registry.bind("airport", airportInterface);
             registry.bind("host", hostInterface);
+            registry.bind("airplane", airplaneInterface);
 
             System.out.println("My SERVER is ready...");
         } catch (Exception ex) {

@@ -1,5 +1,6 @@
 package database.data;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 import com.google.gson.Gson;
@@ -73,8 +74,13 @@ public class AirplaneDataMapper {
         int maxWeightCapacity = airplaneDoc.getInteger("maxWeightCapacity", 0);
         double maxTravelDistance = airplaneDoc.getDouble("maxTravelDistance");
 
-        return new Airplane(airplaneID, name, type, onDuty, level, seats, maxSeatsCapacity,
-                maxBusnissSeats, maxWeightPerSeat, maxWeightCapacity, maxTravelDistance);
+        try {
+            return new Airplane(airplaneID, name, type, onDuty, level, seats, maxSeatsCapacity,
+                    maxBusnissSeats, maxWeightPerSeat, maxWeightCapacity, maxTravelDistance);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     private ArrayList<Airplane> getAirplanesArrayList(MongoCursor<Document> cursor) {

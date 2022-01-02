@@ -1,12 +1,16 @@
 package models.airline;
 
+import java.io.Serializable;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 
 import org.bson.types.ObjectId;
 
 import database.data.AirplaneDataMapper;
+import rmi.AirplaneInterface;
 
-public class Airplane {
+public class Airplane extends UnicastRemoteObject implements AirplaneInterface, Serializable {
     private ObjectId airplaneID;
     private String name;
     private String type;
@@ -21,14 +25,14 @@ public class Airplane {
 
     private AirplaneDataMapper mapper = new AirplaneDataMapper();
 
-    public Airplane() {
+    public Airplane() throws RemoteException {
 
     }
 
     public Airplane(ObjectId airplaneID, String name, String type, boolean onDuty, String level, ArrayList<Seat> seats,
             int maxSeatsCapacity,
             int maxBusnissSeats,
-            int maxWeightPerSeat, int maxWeightCapacity, double maxTravelDistance) {
+            int maxWeightPerSeat, int maxWeightCapacity, double maxTravelDistance) throws RemoteException {
         this.airplaneID = airplaneID;
         this.name = name;
         this.type = type;
@@ -43,7 +47,7 @@ public class Airplane {
     }
 
     public void addAirplane(String name, String type, String level, int maxSeatsCapacity, int maxBusnissSeats,
-            int maxWeightPerSeat, double maxTravelDistance) {
+            int maxWeightPerSeat, double maxTravelDistance) throws RemoteException {
         this.name = name;
         this.type = type;
         this.onDuty = false;
@@ -66,7 +70,7 @@ public class Airplane {
         mapper.insert(this);
     }
 
-    public ArrayList<Airplane> getAirplanes() {
+    public ArrayList<Airplane> getAirplanes() throws RemoteException {
         ArrayList<Airplane> airplanes = null;
         airplanes = mapper.fetchAirplanes();
         if (airplanes == null) {
@@ -80,7 +84,7 @@ public class Airplane {
         mapper.updateAirplane(this.airplaneID, this.onDuty);
     }
 
-    public boolean removeHost() {
+    public boolean removeAirplane() throws RemoteException {
         return this.mapper.removeAirplane(this);
     }
 
