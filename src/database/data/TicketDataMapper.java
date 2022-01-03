@@ -1,5 +1,6 @@
 package database.data;
 
+import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,7 +18,7 @@ import models.ticket.ticketState.EndBookingState;
 import models.ticket.ticketState.TicketState;
 import rmi.TicketInterface;
 
-public class TicketDataMapper {
+public class TicketDataMapper implements Serializable {
 
 
     public Seat createSeatObj(Document seatDoc) {
@@ -89,7 +90,7 @@ public class TicketDataMapper {
         return ticketDoc;
     }
 
-    public Ticket createTicketObj(Document ticketDoc) {
+    public Ticket createTicketObj(Document ticketDoc) throws RemoteException {
 
         double price = ticketDoc.getDouble("price");
         int requestExtraWeight = ticketDoc.getInteger("requestExtraWeight", 0);

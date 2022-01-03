@@ -1,5 +1,6 @@
 package database.data;
 
+import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,7 +24,7 @@ import models.user.Passenger;
 import rmi.PassengerInterface;
 import rmi.TicketInterface;
 
-public class PassengerDataMapper {
+public class PassengerDataMapper implements Serializable {
     private MongoCollection userCollection = DatabaseConnection.getCollection("users");
 
     private TicketDataMapper ticketDataMapper = new TicketDataMapper();
@@ -50,7 +51,8 @@ public class PassengerDataMapper {
     }
 
     public void updateTickets(TicketInterface ticket, Passenger passenger) throws RemoteException {
-        userCollection.findOneAndUpdate(Filters.eq("_id", passenger.getUserId()),
+        System.out.println("Erroooor");
+        userCollection.updateOne(Filters.eq("_id", passenger.getUserId()),
                 Updates.push("tickets", ticketDataMapper.createTicketDocument(ticket)));
     }
 
@@ -79,7 +81,12 @@ public class PassengerDataMapper {
 
         ArrayList<TicketInterface> tickets = new ArrayList<TicketInterface>();
         ticketsDocs.forEach((ticketDoc) -> {
-            tickets.add(ticketDataMapper.createTicketObj(ticketDoc));
+            try {
+                tickets.add(ticketDataMapper.createTicketObj(ticketDoc));
+            } catch (RemoteException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         });
 
         return tickets;

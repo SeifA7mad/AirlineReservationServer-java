@@ -1,22 +1,19 @@
 package models.ticket;
 
+import java.io.Serializable;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.bson.types.ObjectId;
-
-import database.data.PassengerDataMapper;
-import database.data.TicketDataMapper;
 import models.airline.Seat;
-import models.airline.airlineTrip.AirlineTrip;
 import models.ticket.ticketState.*;
-import models.user.Passenger;
 import rmi.AirlineTripInterface;
 import rmi.PassengerInterface;
 import rmi.TicketInterface;
 
-public class Ticket implements TicketPrototype, TicketInterface {
+public class Ticket extends UnicastRemoteObject implements TicketPrototype, TicketInterface, Serializable {
     private ObjectId ticketId;
     private double price;
     private int requestExtraWeight;
@@ -28,15 +25,13 @@ public class Ticket implements TicketPrototype, TicketInterface {
     private PassengerInterface passenger;
     private Enquiry enquiry;
 
-    private PassengerDataMapper passengerMapper = new PassengerDataMapper();
-
-    public Ticket() {
+    public Ticket() throws RemoteException {
 
     }
 
     public Ticket(double price, int requestExtraWeight, boolean requestWheelChair, String type,
             TicketState ticketstate,
-            HashMap<ObjectId, Seat> airlineTripSeats, Payment payment, Enquiry enquiry) {
+            HashMap<ObjectId, Seat> airlineTripSeats, Payment payment, Enquiry enquiry) throws RemoteException {
         this.price = price;
         this.requestExtraWeight = requestExtraWeight;
         this.requestWheelChair = requestWheelChair;
@@ -48,7 +43,7 @@ public class Ticket implements TicketPrototype, TicketInterface {
     }
 
     public Ticket(double price, int requestExtraWeight, boolean requestWheelChair, String type,
-            TicketState ticketstate, HashMap<ObjectId, Seat> airlineTripSeats, Payment payment) {
+            TicketState ticketstate, HashMap<ObjectId, Seat> airlineTripSeats, Payment payment) throws RemoteException {
         this.price = price;
         this.requestExtraWeight = requestExtraWeight;
         this.requestWheelChair = requestWheelChair;
@@ -103,7 +98,7 @@ public class Ticket implements TicketPrototype, TicketInterface {
     }
 
     @Override
-    public TicketPrototype clone(ArrayList<AirlineTripInterface> airlineTrips) {
+    public TicketPrototype clone(ArrayList<AirlineTripInterface> airlineTrips) throws RemoteException {
         HashMap<ObjectId, Seat> airlineSeats = new HashMap<ObjectId, Seat>();
 
         airlineTrips.forEach((airlineTrip) -> {
