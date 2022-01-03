@@ -50,7 +50,7 @@ public class PassengerDataMapper implements Serializable {
         return tickets;
     }
 
-    public void updateTickets(TicketInterface ticket, Passenger passenger) throws RemoteException {
+    public void updateTickets(TicketInterface ticket, PassengerInterface passenger) throws RemoteException {
         System.out.println("Erroooor");
         userCollection.updateOne(Filters.eq("_id", passenger.getUserId()),
                 Updates.push("tickets", ticketDataMapper.createTicketDocument(ticket)));

@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.bson.types.ObjectId;
+
+import database.data.PassengerDataMapper;
 import models.airline.Seat;
 import models.ticket.ticketState.*;
 import rmi.AirlineTripInterface;
@@ -24,7 +26,8 @@ public class Ticket extends UnicastRemoteObject implements TicketPrototype, Tick
     private Payment payment;
     private PassengerInterface passenger;
     private Enquiry enquiry;
-
+    
+    private PassengerDataMapper passengerMapper = new PassengerDataMapper();
     public Ticket() throws RemoteException {
 
     }
@@ -83,11 +86,12 @@ public class Ticket extends UnicastRemoteObject implements TicketPrototype, Tick
             booked = true;
         }
         if (booked) {
-            this.passenger.addBookedTicket(this, airlineTrips);
+            this.passengerMapper.updateTickets(this, passenger);
+          
             if (passenger.getCompanions().size() > 0) {
                 passenger.getCompanions().forEach((companion) -> {
                     try {
-                        ((PassengerInterface) companion).addBookedTicket((Ticket) this.clone(airlineTrips), airlineTrips);
+                        passengerMapper.updateTickets((TicketInterface) this.clone(airlineTrips), (PassengerInterface) companion);
                     } catch (RemoteException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();

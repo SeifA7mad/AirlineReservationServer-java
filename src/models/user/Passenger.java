@@ -49,8 +49,10 @@ public class Passenger extends User implements AirlineTripObserver, PassengerInt
         return this.companions;
     }
 
-    public void addBookedTicket(TicketInterface ticket, ArrayList<AirlineTripInterface> airlineTrips) throws RemoteException {
+    public void addBookedTicket(Ticket ticket, ArrayList<AirlineTripInterface> airlineTrips) throws RemoteException {
         this.tickets.add(ticket);
+        System.out.println(this.getFname());
+        System.out.println(ticket.getPrice());
         passengerMapper.updateTickets(ticket, this);
 
         // airlineTrips.forEach((airlineTrip) -> {

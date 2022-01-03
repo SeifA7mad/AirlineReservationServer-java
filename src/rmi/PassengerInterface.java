@@ -17,6 +17,6 @@ public interface PassengerInterface extends UserInterface {
     public ArrayList<PassengerInterface> getCompanions() throws RemoteException;
 
     public void addBookedTicket(
-            TicketInterface ticket, ArrayList<AirlineTripInterface> airlineTrips) throws RemoteException;
+            Ticket ticket, ArrayList<AirlineTripInterface> airlineTrips) throws RemoteException;
 
 }
