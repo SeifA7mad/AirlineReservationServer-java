@@ -1,5 +1,6 @@
 package models.ticket;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -11,8 +12,11 @@ import models.airline.Seat;
 import models.airline.airlineTrip.AirlineTrip;
 import models.ticket.ticketState.*;
 import models.user.Passenger;
+import rmi.AirlineTripInterface;
+import rmi.PassengerInterface;
+import rmi.TicketInterface;
 
-public class Ticket implements TicketPrototype {
+public class Ticket implements TicketPrototype, TicketInterface {
     private ObjectId ticketId;
     private double price;
     private int requestExtraWeight;
@@ -21,7 +25,7 @@ public class Ticket implements TicketPrototype {
     private TicketState ticketstate;
     private HashMap<ObjectId, Seat> airlineTripSeats;
     private Payment payment;
-    private Passenger passenger;
+    private PassengerInterface passenger;
     private Enquiry enquiry;
 
     private PassengerDataMapper passengerMapper = new PassengerDataMapper();
@@ -54,15 +58,17 @@ public class Ticket implements TicketPrototype {
         this.payment = payment;
     }
 
-    public void bookTicket(ArrayList<AirlineTrip> airlineTrips, Passenger passenger, int requestExtraWeight,
-            boolean requestWheelChair, String ticketType, Payment payment) {
+    public void bookTicket(ArrayList<AirlineTripInterface> airlineTrips, PassengerInterface passenger,
+            int requestExtraWeight,
+            boolean requestWheelChair, String ticketType, String creditcardNumber, String nameOnCard,
+            String expiredDate) throws RemoteException {
 
         boolean booked = false;
         this.requestExtraWeight = requestExtraWeight;
         this.requestWheelChair = requestWheelChair;
         this.type = ticketType;
-        this.payment = payment;
         this.passenger = passenger;
+        this.payment = new Payment(creditcardNumber, nameOnCard, expiredDate);
         this.price = this.requestExtraWeight * 10;
         this.ticketstate = new BookingState();
         this.airlineTripSeats = new HashMap<ObjectId, Seat>();
@@ -85,30 +91,41 @@ public class Ticket implements TicketPrototype {
             this.passenger.addBookedTicket(this, airlineTrips);
             if (passenger.getCompanions().size() > 0) {
                 passenger.getCompanions().forEach((companion) -> {
-                    ((Passenger) companion).addBookedTicket((Ticket) this.clone(airlineTrips), airlineTrips);
+                    try {
+                        ((PassengerInterface) companion).addBookedTicket((Ticket) this.clone(airlineTrips), airlineTrips);
+                    } catch (RemoteException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
                 });
             }
         }
     }
 
-
     @Override
-    public TicketPrototype clone(ArrayList<AirlineTrip> airlineTrips) {
+    public TicketPrototype clone(ArrayList<AirlineTripInterface> airlineTrips) {
         HashMap<ObjectId, Seat> airlineSeats = new HashMap<ObjectId, Seat>();
 
         airlineTrips.forEach((airlineTrip) -> {
-            Seat bookedSeat = airlineTrip.getFirstAvailableSeat(this.type);
-            if (bookedSeat == null) {
-                System.out.println("no available seats");
-                return;
+            Seat bookedSeat;
+            try {
+                bookedSeat = airlineTrip.getFirstAvailableSeat(this.type);
+                if (bookedSeat == null) {
+                    System.out.println("no available seats");
+                    return;
+                }
+
+                airlineSeats.put(airlineTrip.getAirlineTripID(), bookedSeat);
+            } catch (RemoteException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
             }
-            airlineSeats.put(airlineTrip.getAirlineTripID(), bookedSeat);
         });
 
         return new Ticket(price, requestExtraWeight, requestWheelChair, type, ticketstate, airlineSeats, payment);
     }
 
-    public boolean cancelTicket(int ticketId, Passenger passenger) {
+    public boolean cancelTicket(int ticketId, PassengerInterface passenger) {
         return this.ticketstate.cancelTicket(ticketId, passenger);
     }
 
@@ -144,7 +161,7 @@ public class Ticket implements TicketPrototype {
         return payment;
     }
 
-    public Passenger getPassenger() {
+    public PassengerInterface getPassenger() {
         return passenger;
     }
 

@@ -1,5 +1,6 @@
 package database.data;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -19,6 +20,8 @@ import models.ticket.Enquiry;
 import models.ticket.Payment;
 import models.ticket.Ticket;
 import models.user.Passenger;
+import rmi.PassengerInterface;
+import rmi.TicketInterface;
 
 public class PassengerDataMapper {
     private MongoCollection userCollection = DatabaseConnection.getCollection("users");
@@ -46,7 +49,7 @@ public class PassengerDataMapper {
         return tickets;
     }
 
-    public void updateTickets(Ticket ticket, Passenger passenger) {
+    public void updateTickets(TicketInterface ticket, Passenger passenger) throws RemoteException {
         userCollection.findOneAndUpdate(Filters.eq("_id", passenger.getUserId()),
                 Updates.push("tickets", ticketDataMapper.createTicketDocument(ticket)));
     }
@@ -56,7 +59,7 @@ public class PassengerDataMapper {
                 Updates.push("companions", companion.getUserId()));
     }
 
-    public boolean removeTicket(int ticketId, Passenger passenger) {
+    public boolean removeTicket(int ticketId, PassengerInterface passenger) throws RemoteException {
         try {
             Document passengerDoc = (Document) userCollection.find(Filters.eq("_id", passenger.getUserId())).first();
             ArrayList<Document> ticketsDocs = passengerDoc.get("tickets", new ArrayList<Document>().getClass());
@@ -70,11 +73,11 @@ public class PassengerDataMapper {
         }
     }
 
-    public ArrayList<Ticket> fetchTickets(Passenger passenger) {
+    public ArrayList<TicketInterface> fetchTickets(Passenger passenger) {
         Document passengerDoc = (Document) userCollection.find(Filters.eq("_id", passenger.getUserId())).first();
         ArrayList<Document> ticketsDocs = passengerDoc.get("tickets", new ArrayList<Document>().getClass());
 
-        ArrayList<Ticket> tickets = new ArrayList<Ticket>();
+        ArrayList<TicketInterface> tickets = new ArrayList<TicketInterface>();
         ticketsDocs.forEach((ticketDoc) -> {
             tickets.add(ticketDataMapper.createTicketObj(ticketDoc));
         });

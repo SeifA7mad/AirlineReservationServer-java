@@ -2,9 +2,10 @@ package models.ticket.ticketState;
 
 import models.ticket.Ticket;
 import models.user.Passenger;
+import rmi.PassengerInterface;
 
 public abstract class TicketState {
-    public abstract boolean cancelTicket(int ticketId, Passenger passenger);
+    public abstract boolean cancelTicket(int ticketId, PassengerInterface passenger);
     
     public abstract boolean requestExtraWeight(int weight);
 

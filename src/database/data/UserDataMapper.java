@@ -15,6 +15,7 @@ import models.ticket.Ticket;
 import models.user.*;
 import rmi.PassengerInterface;
 import rmi.PilotInterface;
+import rmi.TicketInterface;
 import rmi.UserInterface;
 
 public class UserDataMapper {
@@ -90,7 +91,7 @@ public class UserDataMapper {
             // CHECK IF COMPANION != NULL AND TICKETS != NULL
             ArrayList<ObjectId> companionsDoc = userDoc.get("companions", new ArrayList<ObjectId>().getClass());
             ArrayList<PassengerInterface> companions = new ArrayList<PassengerInterface>();
-            ArrayList<Ticket> tickets = new ArrayList<Ticket>();
+            ArrayList<TicketInterface> tickets = new ArrayList<TicketInterface>();
 
             companionsDoc.forEach((id) -> {
                 companions.add((Passenger) findPassengerBy(id));

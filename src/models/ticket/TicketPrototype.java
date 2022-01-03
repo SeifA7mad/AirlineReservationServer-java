@@ -3,7 +3,8 @@ package models.ticket;
 import java.util.ArrayList;
 
 import models.airline.airlineTrip.AirlineTrip;
+import rmi.AirlineTripInterface;
 
 public interface TicketPrototype {
-    public TicketPrototype clone(ArrayList<AirlineTrip> airlineTrips);
+    public TicketPrototype clone(ArrayList<AirlineTripInterface> airlineTrips);
 }

@@ -10,11 +10,13 @@ import database.data.PassengerDataMapper;
 import models.airline.airlineTrip.AirlineTrip;
 import models.ticket.Ticket;
 import models.user.airlineTripObserver.AirlineTripObserver;
+import rmi.AirlineTripInterface;
 import rmi.PassengerInterface;
+import rmi.TicketInterface;
 
 public class Passenger extends User implements AirlineTripObserver, PassengerInterface, Serializable {
     private ArrayList<PassengerInterface> companions;
-    private ArrayList<Ticket> tickets;
+    private ArrayList<TicketInterface> tickets;
 
     private PassengerDataMapper passengerMapper = new PassengerDataMapper();
 
@@ -24,13 +26,13 @@ public class Passenger extends User implements AirlineTripObserver, PassengerInt
         super(passportID, Fname, Lname, DOB, phoneNo, gender, username, email, password, "passenger");
 
         this.companions = new ArrayList<PassengerInterface>();
-        this.tickets = new ArrayList<Ticket>();
+        this.tickets = new ArrayList<TicketInterface>();
     }
 
     public Passenger(ObjectId userId, String passportID, String Fname, String Lname,
             String DOB, String phoneNo, char gender,
             String username, String email, String password, ArrayList<PassengerInterface> companions,
-            ArrayList<Ticket> tickets) throws RemoteException {
+            ArrayList<TicketInterface> tickets) throws RemoteException {
         super(userId, passportID, Fname, Lname, DOB, phoneNo, gender, username, email, password, "passenger");
         this.companions = companions;
         this.tickets = tickets;
@@ -47,13 +49,13 @@ public class Passenger extends User implements AirlineTripObserver, PassengerInt
         return this.companions;
     }
 
-    public void addBookedTicket(Ticket ticket, ArrayList<AirlineTrip> airlineTrips) {
+    public void addBookedTicket(TicketInterface ticket, ArrayList<AirlineTripInterface> airlineTrips) throws RemoteException {
         this.tickets.add(ticket);
         passengerMapper.updateTickets(ticket, this);
 
-        airlineTrips.forEach((airlineTrip) -> {
-            airlineTrip.addObserver(this);
-        });
+        // airlineTrips.forEach((airlineTrip) -> {
+        //     airlineTrip.addObserver(this);
+        // });
     }
 
     public boolean cancelTicket(int ticketId, Ticket ticket) {
@@ -87,8 +89,8 @@ public class Passenger extends User implements AirlineTripObserver, PassengerInt
         return isRemoved;
     }
 
-    public ArrayList<Ticket> getPassengerTickets() {
-        ArrayList<Ticket> tickets = passengerMapper.fetchTickets(this);
+    public ArrayList<TicketInterface> getPassengerTickets() {
+        ArrayList<TicketInterface> tickets = passengerMapper.fetchTickets(this);
         return tickets;
     }
 
@@ -96,7 +98,7 @@ public class Passenger extends User implements AirlineTripObserver, PassengerInt
         return this.companions;
     }
 
-    public ArrayList<Ticket> getTickets() {
+    public ArrayList<TicketInterface> getTickets() {
         return this.tickets;
     }
 

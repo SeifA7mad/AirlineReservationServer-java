@@ -1,5 +1,6 @@
 package database.data;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,6 +15,7 @@ import models.ticket.Ticket;
 import models.ticket.ticketState.BookingState;
 import models.ticket.ticketState.EndBookingState;
 import models.ticket.ticketState.TicketState;
+import rmi.TicketInterface;
 
 public class TicketDataMapper {
 
@@ -76,7 +78,7 @@ public class TicketDataMapper {
         return airlineTripSeatDocuments;
     }
 
-    public Document createTicketDocument(Ticket ticket) {
+    public Document createTicketDocument(TicketInterface ticket) throws RemoteException {
         Document ticketDoc = new Document().append("price", ticket.getPrice())
                 .append("requestExtraWeight", ticket.getRequestExtraWeight())
                 .append("requestWheelChair", ticket.isRequestWheelChair()).append("type", ticket.getType())

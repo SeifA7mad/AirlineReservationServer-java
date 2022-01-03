@@ -36,6 +36,7 @@ import rmi.CrewInterface;
 import rmi.HostInterface;
 import rmi.PassengerInterface;
 import rmi.PilotInterface;
+import rmi.TicketInterface;
 import rmi.UserInterface;
 
 public class AirlineReservationServer {
@@ -55,7 +56,7 @@ public class AirlineReservationServer {
             AdminInterface adminInterface = new Admin();
             CrewInterface crewInterface = new Crew();
             AirlineTripInterface airlineTripInterface = new AirlineTrip();
-
+            TicketInterface ticketInterface = new Ticket();
             // My RMI Registry
             Registry registry = LocateRegistry.createRegistry(1099);
 
@@ -68,6 +69,7 @@ public class AirlineReservationServer {
             registry.bind("admin", adminInterface);
             registry.bind("crew", crewInterface);
             registry.bind("airlineTrip", airlineTripInterface);
+            registry.bind("ticket", ticketInterface);
             System.out.println("My SERVER is ready...");
         } catch (Exception ex) {
             System.out.println(ex);
