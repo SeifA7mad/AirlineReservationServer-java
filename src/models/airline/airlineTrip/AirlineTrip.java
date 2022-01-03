@@ -14,7 +14,7 @@ import models.airline.Crew;
 import models.airline.Seat;
 import models.airline.airlineTrip.airlineTripState.*;
 import models.ticket.Ticket;
-
+import models.user.Admin;
 import models.user.airlineTripObserver.AirlineTripObserver;
 import rmi.AirlineTripInterface;
 import rmi.AirplaneInterface;
@@ -200,6 +200,65 @@ public class AirlineTrip extends UnicastRemoteObject implements AirlineTripSubje
 
     public AirlineTripDataMapper getDataMapper() {
         return this.mapper;
+    }
+
+    public void setAirlineTripID(String airlineTripID2) {
+    }
+
+    public void setMaxNumberOfTickets(int maxNumberOfTickets2) {
+    }
+
+    public void setAirplane(Airplane airplane2) {
+    }
+
+    public void setOrigin(Airport origin2) {
+    }
+
+    public void setDestination(Airport destination2) {
+    }
+
+    public void setAirlineTripDetails(ArrayList<AirlineTripDetatils> airlineTripDetails2) {
+    }
+
+    public void setAirlineCost(double airlineCost2) {
+    }
+
+    public void setTickets(ArrayList<Ticket> tickets2) {
+    }
+
+    public void setCrew(Crew crew2) {
+    }
+
+    public void setAdmin(Admin admin) {
+    }
+
+    public void setMapper(AirlineTripDataMapper mapper2) {
+    }
+
+    public void setCrewObserver(AirlineTripObserver crewObserver) {
+    }
+
+    public void setPassengerObservers(ArrayList<AirlineTripObserver> passengerObservers2) {
+    }
+
+    public ArrayList<Ticket> getTickets() {
+        return null;
+    }
+
+    public Admin getAdmin() {
+        return null;
+    }
+
+    public AirlineTripDataMapper getMapper() {
+        return null;
+    }
+
+    public AirlineTripObserver getCrewObserver() {
+        return null;
+    }
+
+    public ArrayList<AirlineTripObserver> getPassengerObservers() {
+        return null;
     }
 
 }
